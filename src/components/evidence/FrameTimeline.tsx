@@ -34,18 +34,18 @@ export const FrameTimeline: React.FC<FrameTimelineProps> = ({
   return (
     <div
       className={cn(
-        'rounded-card glass-surface p-4 border border-white/[0.08] flex flex-col gap-3',
+        'rounded-none bg-surface p-4 border border-border flex flex-col gap-3',
         className
       )}
     >
       {/* Header bar with controls */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <SlidersHorizontal className="w-3.5 h-3.5 text-slate-400 stroke-[1.75]" />
-          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-slate-300 font-bold">
+          <SlidersHorizontal className="w-3.5 h-3.5 text-muted stroke-[1.75]" />
+          <span className="font-mono text-[10px] uppercase tracking-wider text-text font-bold">
             Temporal Multi-Frame Scrubber
           </span>
-          <span className="font-mono text-[10px] text-slate-500">
+          <span className="font-mono text-[10px] text-muted">
             ({frames.length} TOTAL FRAMES)
           </span>
         </div>
@@ -55,18 +55,18 @@ export const FrameTimeline: React.FC<FrameTimelineProps> = ({
           <button
             onClick={handlePrev}
             disabled={currentIndex <= 0}
-            className="w-6 h-6 rounded bg-white/[0.04] border border-white/10 flex items-center justify-center text-slate-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+            className="w-6 h-6 rounded-none bg-surface-alt border border-border flex items-center justify-center text-text hover:bg-surface disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
             title="Previous Frame"
           >
             <ChevronLeft className="w-3.5 h-3.5" />
           </button>
-          <span className="font-mono text-xs font-bold text-white px-1">
+          <span className="font-mono text-xs font-bold text-text px-1">
             F#{String(activeFrameNumber).padStart(4, '0')}
           </span>
           <button
             onClick={handleNext}
             disabled={currentIndex >= frames.length - 1}
-            className="w-6 h-6 rounded bg-white/[0.04] border border-white/10 flex items-center justify-center text-slate-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+            className="w-6 h-6 rounded-none bg-surface-alt border border-border flex items-center justify-center text-text hover:bg-surface disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
             title="Next Frame"
           >
             <ChevronRight className="w-3.5 h-3.5" />
@@ -88,14 +88,14 @@ export const FrameTimeline: React.FC<FrameTimelineProps> = ({
               />
 
               {/* Confidence progress indicator beneath frame */}
-              <div className="flex items-center justify-between font-mono text-[9px] text-slate-400 px-0.5">
-                <span className={cn(isActive && 'text-white font-bold')}>
+              <div className="flex items-center justify-between font-mono text-[9px] text-muted px-0.5">
+                <span className={cn(isActive && 'text-text font-bold')}>
                   F#{frame.frameNumber}
                 </span>
                 <span
                   className={cn(
                     'font-semibold',
-                    frame.confidence >= 75 ? 'text-emerald-400' : 'text-amber-400'
+                    frame.confidence >= 75 ? 'text-sev-low' : 'text-hazard'
                   )}
                 >
                   {frame.confidence}%

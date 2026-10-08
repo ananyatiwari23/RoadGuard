@@ -26,44 +26,41 @@ export const MetricCard: React.FC<MetricCardProps> = ({
   return (
     <div
       className={cn(
-        'rounded-card glass-surface p-5 flex flex-col justify-between transition-all duration-300 hover:border-white/20 relative overflow-hidden group',
+        'rounded-none bg-surface border border-border p-5 flex flex-col justify-between transition-colors',
         className
       )}
     >
-      {/* Background glow accent */}
-      <div className="absolute top-0 right-0 w-24 h-24 bg-white/[0.015] rounded-full blur-2xl pointer-events-none group-hover:bg-white/[0.03] transition-colors" />
-
       {/* Header with label + icon */}
       <div className="flex items-center justify-between mb-3">
-        <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-slate-400">
+        <span className="font-mono text-[11px] uppercase tracking-wider text-muted font-medium">
           {label}
         </span>
         {Icon && (
-          <div className="w-7 h-7 rounded-lg bg-white/[0.03] border border-white/[0.08] flex items-center justify-center text-slate-400 group-hover:text-slate-200 transition-colors">
-            <Icon className="w-3.5 h-3.5 stroke-[1.75]" />
+          <div className="text-muted">
+            <Icon className="w-4 h-4 stroke-[1.75]" />
           </div>
         )}
       </div>
 
       {/* Value */}
       <div className="flex items-baseline gap-2 mb-1">
-        <div className="font-mono text-2xl font-bold tracking-tight text-white">
+        <div className="font-mono text-2xl font-bold tracking-tight text-text">
           {value}
         </div>
       </div>
 
       {/* Delta and description footer */}
       {(delta || description) && (
-        <div className="flex items-center gap-2 mt-2 pt-2 border-t border-white/[0.04]">
+        <div className="flex items-center gap-2 mt-2 pt-2 border-t border-border">
           {delta && (
             <span
               className={cn(
-                'inline-flex items-center gap-0.5 font-mono text-[11px] font-semibold rounded px-1.5 py-0.5',
+                'inline-flex items-center gap-0.5 font-mono text-[11px] font-semibold rounded-none px-1.5 py-0.5 border',
                 delta.neutral
-                  ? 'text-slate-400 bg-white/[0.04]'
+                  ? 'text-muted bg-surface-alt border-border'
                   : delta.positive
-                  ? 'text-emerald-400 bg-emerald-500/10'
-                  : 'text-rose-400 bg-rose-500/10'
+                  ? 'text-sev-low bg-sev-low/10 border-sev-low/40'
+                  : 'text-sev-high bg-sev-high/10 border-sev-high/40'
               )}
             >
               {delta.neutral ? (
@@ -77,7 +74,7 @@ export const MetricCard: React.FC<MetricCardProps> = ({
             </span>
           )}
           {description && (
-            <span className="text-[11px] text-slate-500 line-clamp-1">{description}</span>
+            <span className="text-[11px] text-muted line-clamp-1">{description}</span>
           )}
         </div>
       )}

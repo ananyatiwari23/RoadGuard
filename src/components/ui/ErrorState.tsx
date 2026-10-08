@@ -18,26 +18,26 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
   return (
     <div
       className={cn(
-        'rounded-card glass-surface p-8 border border-rose-500/20 bg-rose-500/[0.02] flex flex-col items-center justify-center text-center',
+        'rounded-none bg-surface p-8 border border-sev-high/40 flex flex-col items-center justify-center text-center',
         className
       )}
     >
-      <div className="w-12 h-12 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400 mb-4">
+      <div className="w-12 h-12 rounded-none bg-sev-high/10 border border-sev-high/30 flex items-center justify-center text-sev-high mb-4">
         <AlertTriangle className="w-6 h-6 stroke-[1.75]" />
       </div>
 
-      <h4 className="font-mono text-xs uppercase tracking-[0.2em] text-rose-300 mb-2 font-bold">
+      <h4 className="font-mono text-xs uppercase tracking-wider text-sev-high mb-2 font-bold">
         {title}
       </h4>
 
-      <p className="text-xs text-slate-400 max-w-md leading-relaxed mb-6 font-mono">
+      <p className="text-xs text-muted max-w-md leading-relaxed mb-6 font-mono">
         {reason}
       </p>
 
       {onRetry && (
         <button
           onClick={onRetry}
-          className="px-4 py-2 rounded text-xs font-mono font-semibold uppercase tracking-[0.1em] border border-white/20 hover:border-white/40 bg-white/[0.04] hover:bg-white/[0.08] text-white flex items-center gap-2 transition-all cursor-pointer"
+          className="px-4 py-2 rounded-none text-xs font-mono font-semibold uppercase tracking-wider border border-border-strong bg-surface hover:bg-surface-alt text-text flex items-center gap-2 transition-colors cursor-pointer"
         >
           <RotateCcw className="w-3.5 h-3.5 stroke-[2]" />
           RETRY OPERATION

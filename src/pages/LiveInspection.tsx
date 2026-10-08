@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import {
   getInspectionDetail,
   getInspectionStatus,
@@ -22,17 +22,11 @@ import {
   RotateCcw,
   FileText,
   Radio,
-  Clock,
   MapPin,
-  Camera,
-  Layers,
-  ArrowRight,
-  ShieldCheck,
 } from 'lucide-react';
 
 export const LiveInspection: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
   const inspectionId = id || 'INSP-2026-0881';
 
   const [inspection, setInspection] = useState<Inspection | null>(null);
@@ -194,21 +188,21 @@ export const LiveInspection: React.FC = () => {
   return (
     <div className="space-y-10 animate-in fade-in duration-700">
       {/* Session Header */}
-      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-6 border-b border-white/[0.08]">
+      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-6 border-b border-border">
         <div>
-          <div className="flex flex-wrap items-center gap-3 font-mono text-[10px] uppercase tracking-[0.2em] text-slate-500 mb-2">
-            <span className="flex items-center gap-1.5 text-slate-400">
-              <Radio className={`w-3 h-3 ${isLiveActive ? 'text-amber-400 animate-pulse' : 'text-slate-500'}`} />
+          <div className="flex flex-wrap items-center gap-3 font-mono text-[11px] uppercase tracking-wider text-muted mb-2 font-medium">
+            <span className="flex items-center gap-1.5 text-muted">
+              <Radio className={`w-3 h-3 ${isLiveActive ? 'text-accent animate-pulse' : 'text-muted'}`} />
               {isLiveActive ? 'ACTIVE PIPELINE STREAM' : 'STATIC TELEMETRY ARCHIVE'}
             </span>
             <span>//</span>
-            <span className="text-white font-bold">{inspection.id}</span>
+            <span className="text-text font-bold">{inspection.id}</span>
           </div>
-          <h1 className="font-sans font-semibold text-3xl sm:text-5xl tracking-tighter leading-[0.9] text-white">
+          <h1 className="font-sans font-bold text-3xl sm:text-5xl tracking-tight text-text">
             Real-Time Decision Cockpit
           </h1>
-          <p className="mt-2 text-xs sm:text-sm text-slate-400 font-sans flex items-center gap-2">
-            <MapPin className="w-3.5 h-3.5 text-slate-500 stroke-[1.5]" />
+          <p className="mt-2 text-xs sm:text-sm text-muted font-sans flex items-center gap-2">
+            <MapPin className="w-3.5 h-3.5 text-muted stroke-[1.5]" />
             {inspection.location || 'Interstate Corridor — Autonomous Patrol Sector'}
           </p>
         </div>
@@ -222,10 +216,10 @@ export const LiveInspection: React.FC = () => {
           <button
             onClick={handleReplay}
             disabled={isResetting}
-            className="flex items-center gap-2 px-4 py-2 rounded-card border border-white/10 bg-white/[0.03] hover:bg-white/[0.08] text-white font-mono text-[11px] uppercase tracking-[0.2em] transition-all disabled:opacity-50 cursor-pointer"
+            className="flex items-center gap-2 px-4 py-2 rounded-none border border-border bg-surface hover:bg-surface-alt text-text font-mono text-[11px] uppercase tracking-wider transition-colors disabled:opacity-50 cursor-pointer"
             title="Restart the agentic decision sequence from Frame #1"
           >
-            <RotateCcw className={`w-3.5 h-3.5 text-slate-400 ${isResetting ? 'animate-spin' : ''}`} />
+            <RotateCcw className={`w-3.5 h-3.5 text-muted ${isResetting ? 'animate-spin' : ''}`} />
             {isResetting ? 'RESETTING...' : 'REPLAY RUN'}
           </button>
 
@@ -235,7 +229,7 @@ export const LiveInspection: React.FC = () => {
             inspection.status === 'REJECTED') && (
             <Link
               to={`/reports/${inspection.id}`}
-              className="flex items-center gap-2 px-4 py-2 rounded-card silver-gradient-bg text-black font-mono text-[11px] font-bold uppercase tracking-[0.2em] hover:opacity-90 shadow-[0_0_20px_rgba(255,255,255,0.15)] transition-all"
+              className="flex items-center gap-2 px-4 py-2 rounded-none bg-text text-bg border border-border-strong font-mono text-[11px] font-bold uppercase tracking-wider hover:opacity-90 transition-opacity"
             >
               <FileText className="w-3.5 h-3.5 stroke-[2]" />
               REPORT BRIEF
@@ -251,14 +245,14 @@ export const LiveInspection: React.FC = () => {
 
       {/* Primary Video Feed & Agent Reasoning Log (12 cols) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Left Column (8 cols): Video Player / Image Sensor Feed (Stage 7 will rebuild full player) */}
+        {/* Left Column (8 cols): Video Player / Image Sensor Feed */}
         <div className="lg:col-span-8">
-          <div className="rounded-card glass-surface p-6 flex flex-col justify-between aspect-[16/10] relative overflow-hidden group">
-            <div className="flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.2em] text-slate-500 z-10">
+          <div className="rounded-none bg-surface border border-border p-6 flex flex-col justify-between aspect-[16/10] relative overflow-hidden group">
+            <div className="flex items-center justify-between font-mono text-[10px] uppercase tracking-wider text-muted z-10 font-medium">
               <span>HIGH-RES OPTIC // OPENCV 5 SENSOR FEED</span>
               <span>{isVideo ? `FRAME ${activeFrameIndex + 1} OF ${inspection.evidence.length || 7}` : 'SINGLE OBSERVATION'}</span>
             </div>
-            <div className="relative flex-1 my-4 flex items-center justify-center rounded-lg overflow-hidden bg-black/60 border border-white/[0.06]">
+            <div className="relative flex-1 my-4 flex items-center justify-center rounded-none overflow-hidden bg-black border border-border">
               {currentFrame ? (
                 <img
                   src={currentFrame.annotatedUrl || currentFrame.imageUrl}
@@ -266,13 +260,13 @@ export const LiveInspection: React.FC = () => {
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <div className="text-slate-500 font-mono text-xs">AWAITING SENSOR FRAMES</div>
+                <div className="text-muted font-mono text-xs">AWAITING SENSOR FRAMES</div>
               )}
-              <div className="absolute top-4 left-4 font-mono text-[9px] uppercase tracking-[0.2em] px-2 py-1 bg-black/80 text-white rounded border border-white/20">
+              <div className="absolute top-4 left-4 font-mono text-[9px] uppercase tracking-wider px-2 py-1 bg-surface/90 text-text rounded-none border border-border">
                 CONFIDENCE: {inspection.confidence}%
               </div>
             </div>
-            <div className="flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.2em] text-slate-500 z-10">
+            <div className="flex items-center justify-between font-mono text-[10px] uppercase tracking-wider text-muted z-10 font-medium">
               <span>RDD2022: {inspection.damageClass}</span>
               <span>STATUS: {inspection.status}</span>
             </div>

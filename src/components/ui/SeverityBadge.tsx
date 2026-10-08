@@ -16,30 +16,30 @@ const SEVERITY_CONFIG: Record<
 > = {
   LOW: {
     label: 'LOW SEVERITY',
-    bg: 'bg-emerald-500/10',
-    text: 'text-emerald-400',
-    border: 'border-emerald-500/25',
+    bg: 'bg-sev-low/[0.08]',
+    text: 'text-sev-low',
+    border: 'border-sev-low/40',
     icon: CheckCircle2,
   },
   MEDIUM: {
     label: 'MEDIUM SEVERITY',
-    bg: 'bg-amber-500/10',
-    text: 'text-amber-400',
-    border: 'border-amber-500/25',
+    bg: 'bg-sev-med/[0.08]',
+    text: 'text-sev-med',
+    border: 'border-sev-med/40',
     icon: AlertTriangle,
   },
   HIGH: {
     label: 'HIGH SEVERITY',
-    bg: 'bg-rose-500/10',
-    text: 'text-rose-400',
-    border: 'border-rose-500/25',
+    bg: 'bg-sev-high/[0.08]',
+    text: 'text-sev-high',
+    border: 'border-sev-high/40',
     icon: AlertCircle,
   },
 };
 
 const SIZE_STYLES = {
-  sm: 'text-[9px] px-2 py-0.5 gap-1',
-  md: 'text-[10px] px-2.5 py-1 gap-1.5',
+  sm: 'text-[10px] px-2 py-0.5 gap-1',
+  md: 'text-[11px] px-2.5 py-1 gap-1.5',
   lg: 'text-xs px-3 py-1.5 gap-2',
 };
 
@@ -61,7 +61,7 @@ export const SeverityBadge: React.FC<SeverityBadgeProps> = ({
   return (
     <span
       className={cn(
-        'inline-flex items-center font-mono uppercase tracking-[0.15em] rounded border transition-colors select-none font-semibold',
+        'inline-flex items-center font-mono uppercase tracking-wider rounded-none border select-none font-bold',
         config.bg,
         config.text,
         config.border,

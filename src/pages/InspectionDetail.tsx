@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { getInspectionDetail } from '../services/api';
 import { Inspection, DAMAGE_CLASSES, mapStatusToWorkflowStage } from '../types';
 import { StatusBadge } from '../components/ui/StatusBadge';
 import { SeverityBadge } from '../components/ui/SeverityBadge';
-import { DamageClassChip } from '../components/ui/DamageClassChip';
 import { AgentWorkflow } from '../components/agent/AgentWorkflow';
 import { EventLog } from '../components/agent/EventLog';
 import { DetectionPanel } from '../components/inspection/DetectionPanel';
@@ -14,7 +13,6 @@ import { LoadingState } from '../components/ui/LoadingState';
 import { ErrorState } from '../components/ui/ErrorState';
 import {
   ArrowLeft,
-  ExternalLink,
   Radio,
   FileText,
   Cpu,
@@ -24,12 +22,10 @@ import {
   Layers,
   HardDrive,
   Camera,
-  CheckCircle,
 } from 'lucide-react';
 
 export const InspectionDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
   const inspectionId = id || 'INSP-2026-0881';
 
   const [inspection, setInspection] = useState<Inspection | null>(null);
@@ -73,41 +69,41 @@ export const InspectionDetail: React.FC = () => {
       <div className="flex items-center justify-between">
         <Link
           to="/history"
-          className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-slate-400 hover:text-white transition-colors"
+          className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-wider text-muted hover:text-text transition-colors"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           BACK TO INSPECTION ARCHIVE
         </Link>
 
-        <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-slate-500">
+        <div className="font-mono text-[10px] uppercase tracking-wider text-muted">
           SECURE AUDIT RECORD // HASH: 8f9b...a1c3
         </div>
       </div>
 
       {/* Header Banner */}
-      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-6 border-b border-white/[0.08]">
+      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-6 border-b border-border">
         <div>
-          <div className="flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.2em] text-slate-500 mb-2">
+          <div className="flex items-center gap-3 font-mono text-[11px] uppercase tracking-wider text-muted mb-2 font-medium">
             <span>AUDIT TELEMETRY RECORD</span>
             <span>//</span>
-            <span className="text-white font-bold">{inspection.id}</span>
+            <span className="text-text font-bold">{inspection.id}</span>
           </div>
-          <h1 className="font-sans font-semibold text-4xl sm:text-5xl tracking-tighter leading-[0.9] text-white">
+          <h1 className="font-sans font-bold text-4xl sm:text-5xl tracking-tight text-text">
             {DAMAGE_CLASSES[inspection.damageClass]?.label || inspection.damageClass} Assessment
           </h1>
-          <div className="mt-3 flex flex-wrap items-center gap-4 text-xs font-mono text-slate-400">
+          <div className="mt-3 flex flex-wrap items-center gap-4 text-xs font-mono text-muted">
             <span className="flex items-center gap-1.5">
-              <Calendar className="w-3.5 h-3.5 text-slate-500" />
+              <Calendar className="w-3.5 h-3.5 text-muted" />
               {inspection.createdAt}
             </span>
             <span>·</span>
             <span className="flex items-center gap-1.5">
-              <MapPin className="w-3.5 h-3.5 text-slate-500" />
+              <MapPin className="w-3.5 h-3.5 text-muted" />
               {inspection.location || 'Highway Corridor Segment 12'}
             </span>
             <span>·</span>
             <span className="flex items-center gap-1.5">
-              <Camera className="w-3.5 h-3.5 text-slate-500" />
+              <Camera className="w-3.5 h-3.5 text-muted" />
               {inspection.inputType} RUN ({inspection.totalFrames || 7} Frames)
             </span>
           </div>
@@ -120,15 +116,15 @@ export const InspectionDetail: React.FC = () => {
 
           <Link
             to={`/live/${inspection.id}`}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-card border border-white/10 bg-white/[0.03] hover:bg-white/[0.08] text-white font-mono text-[11px] uppercase tracking-[0.2em] transition-all"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-none border border-border bg-surface hover:bg-surface-alt text-text font-mono text-[11px] uppercase tracking-wider transition-colors"
           >
-            <Radio className="w-3.5 h-3.5 text-slate-400" />
+            <Radio className="w-3.5 h-3.5 text-muted" />
             LIVE COCKPIT
           </Link>
 
           <Link
             to={`/reports/${inspection.id}`}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-card silver-gradient-bg text-black font-mono text-[11px] font-bold uppercase tracking-[0.2em] hover:opacity-90 shadow-[0_0_20px_rgba(255,255,255,0.15)] transition-all"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-none bg-text text-bg border border-border-strong font-mono text-[11px] font-bold uppercase tracking-wider hover:opacity-90 transition-opacity"
           >
             <FileText className="w-3.5 h-3.5 stroke-[2]" />
             REPORT BRIEF
@@ -143,44 +139,44 @@ export const InspectionDetail: React.FC = () => {
 
       {/* Hardware & Hardware Acceleration Telemetry Strip */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="p-4 rounded-card glass-surface border border-white/[0.06]">
-          <div className="flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.2em] text-slate-500 mb-1">
-            <Cpu className="w-3.5 h-3.5 text-slate-400" />
+        <div className="p-4 rounded-none bg-surface border border-border">
+          <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-wider text-muted mb-1 font-medium">
+            <Cpu className="w-3.5 h-3.5 text-muted" />
             <span>ACCELERATOR</span>
           </div>
-          <div className="font-mono text-sm text-white font-semibold">AWS Graviton3 ARM</div>
-          <div className="font-mono text-[10px] text-slate-500 mt-0.5">c7g.2xlarge NEON</div>
+          <div className="font-mono text-sm text-text font-semibold">AWS Graviton3 ARM</div>
+          <div className="font-mono text-[10px] text-muted mt-0.5">c7g.2xlarge NEON</div>
         </div>
 
-        <div className="p-4 rounded-card glass-surface border border-white/[0.06]">
-          <div className="flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.2em] text-slate-500 mb-1">
-            <Zap className="w-3.5 h-3.5 text-slate-400" />
+        <div className="p-4 rounded-none bg-surface border border-border">
+          <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-wider text-muted mb-1 font-medium">
+            <Zap className="w-3.5 h-3.5 text-muted" />
             <span>VISION ENGINE</span>
           </div>
-          <div className="font-mono text-sm text-white font-semibold">OpenCV 5.0.0 (COOL)</div>
-          <div className="font-mono text-[10px] text-slate-500 mt-0.5">Kernel JIT Compiled</div>
+          <div className="font-mono text-sm text-text font-semibold">OpenCV 5.0.0 (COOL)</div>
+          <div className="font-mono text-[10px] text-muted mt-0.5">Kernel JIT Compiled</div>
         </div>
 
-        <div className="p-4 rounded-card glass-surface border border-white/[0.06]">
-          <div className="flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.2em] text-slate-500 mb-1">
-            <Layers className="w-3.5 h-3.5 text-slate-400" />
+        <div className="p-4 rounded-none bg-surface border border-border">
+          <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-wider text-muted mb-1 font-medium">
+            <Layers className="w-3.5 h-3.5 text-muted" />
             <span>TEMPORAL LOCK</span>
           </div>
-          <div className="font-mono text-sm text-white font-semibold">
+          <div className="font-mono text-sm text-text font-semibold">
             {inspection.persistenceFrames} / {inspection.totalFrames || 7} Frames
           </div>
-          <div className="font-mono text-[10px] text-slate-500 mt-0.5">
+          <div className="font-mono text-[10px] text-muted mt-0.5">
             Confirmed Persistent
           </div>
         </div>
 
-        <div className="p-4 rounded-card glass-surface border border-white/[0.06]">
-          <div className="flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.2em] text-slate-500 mb-1">
-            <HardDrive className="w-3.5 h-3.5 text-slate-400" />
+        <div className="p-4 rounded-none bg-surface border border-border">
+          <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-wider text-muted mb-1 font-medium">
+            <HardDrive className="w-3.5 h-3.5 text-muted" />
             <span>LATENCY PROFILE</span>
           </div>
-          <div className="font-mono text-sm text-white font-semibold">14.8 ms / Frame</div>
-          <div className="font-mono text-[10px] text-slate-500 mt-0.5">4.2x Faster vs x86</div>
+          <div className="font-mono text-sm text-text font-semibold">14.8 ms / Frame</div>
+          <div className="font-mono text-[10px] text-muted mt-0.5">4.2x Faster vs x86</div>
         </div>
       </div>
 

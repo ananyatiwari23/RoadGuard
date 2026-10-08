@@ -1,21 +1,14 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { getInspectionHistory, getInspectionDetail, getReport } from '../services/api';
-import { Inspection, Severity, Report } from '../types';
+import { Severity, Report } from '../types';
 import { ReportPreview } from '../components/inspection/ReportPreview';
 import { LoadingState } from '../components/ui/LoadingState';
 import { EmptyState } from '../components/ui/EmptyState';
 import { ErrorState } from '../components/ui/ErrorState';
 import {
-  FileText,
   Search,
-  Filter,
-  CheckCircle,
-  AlertTriangle,
-  Clock,
-  Download,
   SlidersHorizontal,
-  RotateCcw,
 } from 'lucide-react';
 
 export const Reports: React.FC = () => {
@@ -99,15 +92,15 @@ export const Reports: React.FC = () => {
   return (
     <div className="space-y-10 animate-in fade-in duration-700">
       {/* Page Header */}
-      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-6 border-b border-white/[0.08]">
+      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-6 border-b border-border">
         <div>
-          <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-slate-500 mb-2">
+          <div className="font-mono text-[11px] uppercase tracking-wider text-muted mb-2 font-medium">
             MUNICIPAL WORK ORDERS // CERTIFIED ENGINEERING BRIEFS
           </div>
-          <h1 className="font-sans font-semibold text-4xl sm:text-5xl tracking-tighter leading-[0.9] text-white">
+          <h1 className="font-sans font-bold text-4xl sm:text-5xl tracking-tight text-text">
             Maintenance Reports
           </h1>
-          <p className="text-slate-400 text-sm mt-3 font-light max-w-2xl font-sans">
+          <p className="text-muted text-sm mt-3 font-normal max-w-2xl font-sans leading-relaxed">
             Official pavement repair briefs generated with multi-frame OpenCV 5 evidence packets, engineering recommendations, and municipal sign-off status.
           </p>
         </div>
@@ -116,13 +109,13 @@ export const Reports: React.FC = () => {
         <div className="flex items-center gap-3">
           <Link
             to="/history"
-            className="flex items-center gap-2 px-4 py-2.5 rounded-card border border-white/10 bg-white/[0.03] hover:bg-white/[0.08] text-white font-mono text-[11px] uppercase tracking-[0.2em] transition-all"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-none border border-border bg-surface hover:bg-surface-alt text-text font-mono text-[11px] uppercase tracking-wider transition-colors"
           >
             INSPECTION ARCHIVE
           </Link>
           <Link
             to="/new"
-            className="flex items-center gap-2 px-5 py-2.5 rounded-card silver-gradient-bg text-black font-mono text-[11px] font-bold uppercase tracking-[0.2em] hover:opacity-90 shadow-[0_0_20px_rgba(255,255,255,0.15)] transition-all"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-none bg-text text-bg border border-border-strong font-mono text-[11px] font-bold uppercase tracking-wider hover:opacity-90 transition-opacity"
           >
             NEW INSPECTION
           </Link>
@@ -131,33 +124,33 @@ export const Reports: React.FC = () => {
 
       {/* Metric Counters */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="p-4 rounded-card glass-surface border border-white/[0.06]">
-          <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-slate-500 block mb-1">
+        <div className="p-4 rounded-none bg-surface border border-border">
+          <span className="font-mono text-[10px] uppercase tracking-wider text-muted block mb-1 font-medium">
             ACTIVE BRIEFS
           </span>
-          <div className="font-sans font-semibold text-3xl text-white">{totalCount}</div>
+          <div className="font-mono font-bold text-3xl text-text">{totalCount}</div>
         </div>
-        <div className="p-4 rounded-card glass-surface border border-white/[0.06]">
-          <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-slate-500 block mb-1">
+        <div className="p-4 rounded-none bg-surface border border-border">
+          <span className="font-mono text-[10px] uppercase tracking-wider text-muted block mb-1 font-medium">
             AWAITING SIGN-OFF
           </span>
-          <div className="font-sans font-semibold text-3xl" style={{ color: '#F5A524' }}>
+          <div className="font-mono font-bold text-3xl text-hazard">
             {pendingCount}
           </div>
         </div>
-        <div className="p-4 rounded-card glass-surface border border-white/[0.06]">
-          <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-slate-500 block mb-1">
+        <div className="p-4 rounded-none bg-surface border border-border">
+          <span className="font-mono text-[10px] uppercase tracking-wider text-muted block mb-1 font-medium">
             AUTHORIZED DISPATCH
           </span>
-          <div className="font-sans font-semibold text-3xl" style={{ color: '#30A46C' }}>
+          <div className="font-mono font-bold text-3xl text-sev-low">
             {approvedCount}
           </div>
         </div>
-        <div className="p-4 rounded-card glass-surface border border-white/[0.06]">
-          <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-slate-500 block mb-1">
+        <div className="p-4 rounded-none bg-surface border border-border">
+          <span className="font-mono text-[10px] uppercase tracking-wider text-muted block mb-1 font-medium">
             HIGH HAZARD REPAIRS
           </span>
-          <div className="font-sans font-semibold text-3xl" style={{ color: '#E5484D' }}>
+          <div className="font-mono font-bold text-3xl text-sev-high">
             {highSeverityCount}
           </div>
         </div>
@@ -166,7 +159,7 @@ export const Reports: React.FC = () => {
       {/* Filter and Tab Bar */}
       <div className="space-y-4">
         {/* Primary Status Tabs */}
-        <div className="flex flex-wrap items-center gap-2 pb-2 border-b border-white/[0.08]">
+        <div className="flex flex-wrap items-center gap-2 pb-2 border-b border-border">
           {[
             { id: 'all', label: `ALL WORK ORDERS (${totalCount})` },
             { id: 'pending', label: `AWAITING SIGN-OFF (${pendingCount})` },
@@ -176,10 +169,10 @@ export const Reports: React.FC = () => {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
-              className={`font-mono text-[11px] uppercase tracking-[0.2em] px-4 py-2 rounded-lg transition-all ${
+              className={`font-mono text-[11px] uppercase tracking-wider px-4 py-2 rounded-none transition-colors cursor-pointer border ${
                 activeTab === tab.id
-                  ? 'bg-white/15 text-white font-bold border border-white/20'
-                  : 'text-slate-400 hover:text-white border border-transparent'
+                  ? 'bg-text text-bg border-border-strong font-bold'
+                  : 'bg-surface text-muted hover:text-text border-border'
               }`}
             >
               {tab.label}
@@ -190,25 +183,25 @@ export const Reports: React.FC = () => {
         {/* Secondary Search & Severity Filter */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 justify-between">
           <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 stroke-[1.5]" />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted stroke-[1.5]" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search reports by ID, location, or repair type..."
-              className="w-full pl-10 pr-4 py-2 bg-black/40 border border-white/10 rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none focus:border-white/30 font-sans"
+              className="w-full pl-10 pr-4 py-2 bg-surface-alt border border-border rounded-none text-sm text-text placeholder:text-muted focus:outline-none focus:border-border-strong font-sans"
             />
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.15em] text-slate-500">
+            <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-wider text-muted font-medium">
               <SlidersHorizontal className="w-3.5 h-3.5" />
               <span>SEVERITY:</span>
             </div>
             <select
               value={severityFilter}
               onChange={(e) => setSeverityFilter(e.target.value as any)}
-              className="bg-black/60 border border-white/10 text-slate-300 text-[11px] font-mono px-3 py-1.5 rounded-lg focus:outline-none focus:border-white/30"
+              className="bg-surface-alt border border-border text-text text-[11px] font-mono px-3 py-1.5 rounded-none focus:outline-none focus:border-border-strong"
             >
               <option value="all">ALL SEVERITIES</option>
               <option value="HIGH">HIGH SEVERITY</option>

@@ -41,28 +41,28 @@ export const DetectionPanel: React.FC<DetectionPanelProps> = ({
   return (
     <div
       className={cn(
-        'rounded-card glass-surface p-6 border border-white/[0.08] flex flex-col gap-5',
+        'rounded-none bg-surface p-6 border border-border flex flex-col gap-5',
         className
       )}
     >
       {/* Header */}
-      <div className="flex items-center justify-between pb-3.5 border-b border-white/[0.08]">
+      <div className="flex items-center justify-between pb-3.5 border-b border-border">
         <div className="flex items-center gap-2">
-          <Target className="w-4 h-4 text-rose-400 stroke-[1.75]" />
-          <h3 className="font-mono text-xs uppercase tracking-[0.2em] text-white font-bold">
+          <Target className="w-4 h-4 text-sev-high stroke-[1.75]" />
+          <h3 className="font-mono text-xs uppercase tracking-wider text-text font-bold">
             Damage Classification
           </h3>
         </div>
-        <span className="font-mono text-[10px] uppercase tracking-wider text-slate-500">
+        <span className="font-mono text-[10px] uppercase tracking-wider text-muted">
           RDD2022 STANDARDS
         </span>
       </div>
 
       {/* Primary Detection Showcase */}
-      <div className="rounded-lg bg-white/[0.02] border border-white/[0.08] p-4 flex flex-col gap-3">
+      <div className="rounded-none bg-surface-alt border border-border p-4 flex flex-col gap-3">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <div className="text-[10px] font-mono uppercase tracking-wider text-slate-400 mb-1">
+            <div className="text-[10px] font-mono uppercase tracking-wider text-muted mb-1 font-medium">
               Primary Detection Class
             </div>
             <div className="flex items-center gap-2">
@@ -70,14 +70,14 @@ export const DetectionPanel: React.FC<DetectionPanelProps> = ({
             </div>
           </div>
           <div className="text-right">
-            <span className="text-[10px] font-mono text-slate-500 uppercase">Class Code</span>
-            <div className="text-lg font-mono font-bold text-white">{damageClass}</div>
+            <span className="text-[10px] font-mono text-muted uppercase">Class Code</span>
+            <div className="text-lg font-mono font-bold text-text">{damageClass}</div>
           </div>
         </div>
 
         {meta && (
-          <p className="text-xs text-slate-300 font-sans leading-relaxed flex items-start gap-1.5 pt-1">
-            <Info className="w-3.5 h-3.5 text-slate-400 shrink-0 mt-0.5" />
+          <p className="text-xs text-text font-sans leading-relaxed flex items-start gap-1.5 pt-1">
+            <Info className="w-3.5 h-3.5 text-muted shrink-0 mt-0.5" />
             <span>{meta.description}</span>
           </p>
         )}
@@ -91,8 +91,8 @@ export const DetectionPanel: React.FC<DetectionPanelProps> = ({
       {/* Alternate Class Candidate Chips */}
       {alternatives.length > 0 && (
         <div className="space-y-2.5">
-          <div className="flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-widest text-slate-400">
-            <Layers className="w-3 h-3 text-slate-500" />
+          <div className="flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-wider text-muted font-medium">
+            <Layers className="w-3 h-3 text-muted" />
             <span>Alternate Candidates (Softmax Distribution)</span>
           </div>
 
@@ -102,12 +102,12 @@ export const DetectionPanel: React.FC<DetectionPanelProps> = ({
                 key={alt.damageClass}
                 onClick={() => onSelectClass && onSelectClass(alt.damageClass)}
                 className={cn(
-                  'rounded bg-white/[0.02] border border-white/[0.06] p-2.5 flex items-center justify-between transition-colors',
-                  onSelectClass && 'cursor-pointer hover:border-white/20 hover:bg-white/[0.04]'
+                  'rounded-none bg-surface-alt border border-border p-2.5 flex items-center justify-between transition-colors',
+                  onSelectClass && 'cursor-pointer hover:border-border-strong hover:bg-surface'
                 )}
               >
                 <DamageClassChip damageClass={alt.damageClass} size="sm" />
-                <span className="font-mono text-xs text-slate-400 font-semibold">
+                <span className="font-mono text-xs text-text font-semibold">
                   {alt.confidence}%
                 </span>
               </div>

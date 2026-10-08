@@ -89,7 +89,7 @@ export const Dashboard: React.FC = () => {
   if (loading) {
     return (
       <div className="space-y-8 animate-in fade-in duration-500 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="h-40 rounded-card glass-surface border border-white/[0.08] animate-pulse" />
+        <div className="h-40 rounded-none bg-surface border border-border animate-pulse" />
         <LoadingState variant="card" count={5} />
         <LoadingState variant="table" count={6} />
       </div>
@@ -129,26 +129,23 @@ export const Dashboard: React.FC = () => {
   return (
     <div className="space-y-8 animate-in fade-in duration-500 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
       {/* 1. HERO BAND — Compact, max-height ~40vh, prevents pushing KPIs below fold on 1080p */}
-      <section className="relative rounded-card glass-surface p-6 sm:p-8 border border-white/[0.08] overflow-hidden">
-        {/* Subtle ambient lighting */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-white/[0.015] rounded-full blur-3xl pointer-events-none" />
-
+      <section className="relative rounded-none bg-surface p-6 sm:p-8 border border-border overflow-hidden">
         <div className="max-w-3xl space-y-3 relative z-10">
           {/* Mono label */}
           <div className="inline-flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-slate-400 font-semibold">
+            <span className="w-2 h-2 rounded-none bg-sev-low" />
+            <span className="font-mono text-[11px] uppercase tracking-wider text-muted font-medium">
               AGENTIC ROAD INSPECTION
             </span>
           </div>
 
-          {/* Headline (Geist Sans 500-600, ~48px, normal style, letter-spacing -0.02em, line-height 1.05) */}
-          <h1 className="font-sans font-semibold text-3xl sm:text-4xl lg:text-[46px] text-white tracking-[-0.02em] leading-[1.05]">
+          {/* Headline */}
+          <h1 className="font-sans font-bold text-3xl sm:text-4xl lg:text-[46px] text-text tracking-tight leading-[1.05]">
             Autonomous road-inspection system.
           </h1>
 
           {/* One-line subhead */}
-          <p className="font-sans text-sm sm:text-base text-slate-400 font-normal leading-snug">
+          <p className="font-sans text-sm sm:text-base text-muted font-normal leading-snug">
             Multi-frame verification for pavement distress.
           </p>
 
@@ -156,7 +153,7 @@ export const Dashboard: React.FC = () => {
           <div className="pt-2 flex flex-wrap items-center gap-3">
             <button
               onClick={() => navigate('/new')}
-              className="btn-silver px-5 py-2.5 rounded font-mono text-xs font-semibold uppercase tracking-[0.15em] flex items-center gap-2 cursor-pointer shadow-lg hover:shadow-white/10 transition-all"
+              className="bg-text text-bg border border-border-strong px-5 py-2.5 rounded-none font-mono text-xs font-bold uppercase tracking-wider flex items-center gap-2 cursor-pointer hover:opacity-90 transition-opacity"
             >
               <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
               <span>NEW INSPECTION</span>
@@ -164,7 +161,7 @@ export const Dashboard: React.FC = () => {
 
             <button
               onClick={() => navigate('/live/RG-0001')}
-              className="px-5 py-2.5 rounded border border-white/20 hover:border-white/40 bg-white/[0.03] hover:bg-white/[0.08] text-white font-mono text-xs font-semibold uppercase tracking-[0.15em] flex items-center gap-2 cursor-pointer transition-all"
+              className="bg-surface hover:bg-surface-alt text-text border border-border px-5 py-2.5 rounded-none font-mono text-xs font-semibold uppercase tracking-wider flex items-center gap-2 cursor-pointer transition-colors"
             >
               <Play className="w-3.5 h-3.5 stroke-[2]" />
               <span>VIEW LIVE DEMO</span>
@@ -173,7 +170,7 @@ export const Dashboard: React.FC = () => {
         </div>
       </section>
 
-      {/* 2. KPI ROW — 5 MetricCards in responsive grid (2 cols mobile / 3 cols tablet / 5 cols desktop) */}
+      {/* 2. KPI ROW — 5 MetricCards in responsive grid */}
       <section className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5">
         <MetricCard
           label="Total Inspections"
@@ -218,22 +215,22 @@ export const Dashboard: React.FC = () => {
         />
       </section>
 
-      {/* 3. TWO-COLUMN SECTION (2/3 + 1/3 on desktop, stacked on mobile) */}
+      {/* 3. TWO-COLUMN SECTION */}
       <section className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
         {/* LEFT (2/3) — Recent Inspections Table */}
-        <div className="lg:col-span-2 rounded-card glass-surface border border-white/[0.08] p-5 flex flex-col justify-between">
-          <div className="flex items-center justify-between pb-4 mb-4 border-b border-white/[0.06]">
+        <div className="lg:col-span-2 rounded-none bg-surface border border-border p-5 flex flex-col justify-between">
+          <div className="flex items-center justify-between pb-4 mb-4 border-b border-border">
             <div>
-              <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-white font-bold">
+              <h2 className="font-mono text-xs uppercase tracking-wider text-text font-bold">
                 Recent Inspections
               </h2>
-              <p className="text-[11px] text-slate-400 font-sans mt-0.5">
+              <p className="text-[11px] text-muted font-sans mt-0.5">
                 8 latest autonomous inspection passes sorted by creation time
               </p>
             </div>
             <Link
               to="/history"
-              className="font-mono text-[11px] text-slate-400 hover:text-white uppercase tracking-wider flex items-center gap-1 transition-colors"
+              className="font-mono text-[11px] text-muted hover:text-text uppercase tracking-wider flex items-center gap-1 transition-colors"
             >
               <span>View All</span>
               <ArrowRight className="w-3 h-3" />
@@ -255,7 +252,7 @@ export const Dashboard: React.FC = () => {
               <div className="hidden md:block overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                   <thead>
-                    <tr className="border-b border-white/[0.06] text-[10px] font-mono uppercase tracking-[0.15em] text-slate-500">
+                    <tr className="border-b border-border-strong bg-surface-alt text-[11px] font-mono uppercase tracking-wider text-muted">
                       <th className="py-2.5 px-3">ID</th>
                       <th className="py-2.5 px-3">Date</th>
                       <th className="py-2.5 px-3">Damage</th>
@@ -266,20 +263,20 @@ export const Dashboard: React.FC = () => {
                       <th className="py-2.5 px-2 text-right"></th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-white/[0.03]">
+                  <tbody className="divide-y divide-border">
                     {recentInspections.map((insp) => (
                       <tr
                         key={insp.id}
                         onClick={() => navigate(`/inspection/${insp.id}`)}
-                        className="group hover:bg-white/[0.03] transition-colors cursor-pointer text-xs font-mono"
+                        className="group hover:bg-surface-alt transition-colors cursor-pointer text-xs font-mono"
                       >
                         {/* ID */}
-                        <td className="py-3 px-3 font-bold text-white group-hover:text-silver-gradient transition-colors">
+                        <td className="py-3 px-3 font-bold text-text">
                           {insp.id}
                         </td>
 
                         {/* Date */}
-                        <td className="py-3 px-3 text-slate-400 text-[11px]">
+                        <td className="py-3 px-3 text-muted text-[11px]">
                           {new Date(insp.createdAt).toLocaleDateString('en-US', {
                             month: 'short',
                             day: 'numeric',
@@ -304,14 +301,14 @@ export const Dashboard: React.FC = () => {
                               size="sm"
                               showLabel={false}
                             />
-                            <span className="text-[10px] text-slate-300 w-8 text-right shrink-0">
+                            <span className="text-[10px] text-muted w-8 text-right shrink-0">
                               {insp.confidence}%
                             </span>
                           </div>
                         </td>
 
                         {/* Frames Checked */}
-                        <td className="py-3 px-3 text-slate-400 text-[11px]">
+                        <td className="py-3 px-3 text-muted text-[11px]">
                           {insp.framesChecked}f
                         </td>
 
@@ -322,7 +319,7 @@ export const Dashboard: React.FC = () => {
 
                         {/* Action Arrow */}
                         <td className="py-3 px-2 text-right">
-                          <ArrowUpRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-white transition-colors ml-auto" />
+                          <ArrowUpRight className="w-3.5 h-3.5 text-muted group-hover:text-text transition-colors ml-auto" />
                         </td>
                       </tr>
                     ))}
@@ -331,16 +328,16 @@ export const Dashboard: React.FC = () => {
               </div>
 
               {/* Mobile Card List (below 768px) */}
-              <div className="md:hidden divide-y divide-white/[0.06] space-y-3">
+              <div className="md:hidden divide-y divide-border space-y-3">
                 {recentInspections.map((insp) => (
                   <div
                     key={insp.id}
                     onClick={() => navigate(`/inspection/${insp.id}`)}
-                    className="pt-3 first:pt-0 hover:bg-white/[0.02] p-2 rounded-lg transition-colors cursor-pointer flex flex-col gap-2 font-mono text-xs"
+                    className="pt-3 first:pt-0 hover:bg-surface-alt p-2 rounded-none transition-colors cursor-pointer flex flex-col gap-2 font-mono text-xs"
                   >
                     <div className="flex items-center justify-between">
-                      <span className="font-bold text-white">{insp.id}</span>
-                      <span className="text-[10px] text-slate-500">
+                      <span className="font-bold text-text">{insp.id}</span>
+                      <span className="text-[10px] text-muted">
                         {new Date(insp.createdAt).toLocaleDateString('en-US', {
                           month: 'short',
                           day: 'numeric',
@@ -354,9 +351,9 @@ export const Dashboard: React.FC = () => {
                       </div>
                       <StatusBadge status={insp.status} size="sm" />
                     </div>
-                    <div className="flex items-center justify-between text-[10px] text-slate-400 pt-0.5">
+                    <div className="flex items-center justify-between text-[10px] text-muted pt-0.5">
                       <span>Confidence: {insp.confidence}% ({insp.framesChecked}f)</span>
-                      <ArrowUpRight className="w-3 h-3 text-slate-400" />
+                      <ArrowUpRight className="w-3 h-3 text-muted" />
                     </div>
                   </div>
                 ))}
@@ -377,12 +374,12 @@ export const Dashboard: React.FC = () => {
       </section>
 
       {/* 4. QUICK ACTIONS ROW */}
-      <section className="rounded-card glass-surface p-5 border border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-4">
+      <section className="rounded-none bg-surface p-5 border border-border flex flex-col sm:flex-row items-center justify-between gap-4">
         <div>
-          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-slate-500 block mb-1">
+          <span className="font-mono text-[10px] uppercase tracking-wider text-muted block mb-1 font-medium">
             RAPID WORKFLOW DISPATCH
           </span>
-          <h3 className="font-sans font-semibold text-sm text-white">
+          <h3 className="font-sans font-semibold text-sm text-text">
             Quick Inspection Actions
           </h3>
         </div>
@@ -390,26 +387,26 @@ export const Dashboard: React.FC = () => {
         <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
           <button
             onClick={() => navigate('/new?type=image')}
-            className="flex-1 sm:flex-none px-4 py-2.5 rounded bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 hover:border-white/20 text-white font-mono text-xs font-medium uppercase tracking-[0.1em] flex items-center justify-center gap-2 transition-all cursor-pointer"
+            className="flex-1 sm:flex-none px-4 py-2.5 rounded-none bg-surface hover:bg-surface-alt border border-border text-text font-mono text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-colors cursor-pointer"
           >
-            <ImageIcon className="w-3.5 h-3.5 text-slate-400" />
+            <ImageIcon className="w-3.5 h-3.5 text-muted" />
             <span>New Image Inspection</span>
           </button>
 
           <button
             onClick={() => navigate('/new?type=video')}
-            className="flex-1 sm:flex-none px-4 py-2.5 rounded bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 hover:border-white/20 text-white font-mono text-xs font-medium uppercase tracking-[0.1em] flex items-center justify-center gap-2 transition-all cursor-pointer"
+            className="flex-1 sm:flex-none px-4 py-2.5 rounded-none bg-surface hover:bg-surface-alt border border-border text-text font-mono text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-colors cursor-pointer"
           >
-            <Video className="w-3.5 h-3.5 text-slate-400" />
+            <Video className="w-3.5 h-3.5 text-muted" />
             <span>New Video Inspection</span>
           </button>
 
           <button
             onClick={() => navigate('/history')}
-            className="flex-1 sm:flex-none px-4 py-2.5 rounded bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 hover:border-white/20 text-white font-mono text-xs font-medium uppercase tracking-[0.1em] flex items-center justify-center gap-2 transition-all cursor-pointer"
+            className="flex-1 sm:flex-none px-4 py-2.5 rounded-none bg-surface hover:bg-surface-alt border border-border text-text font-mono text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-colors cursor-pointer"
           >
             <span>View All Inspections</span>
-            <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
+            <ArrowRight className="w-3.5 h-3.5 text-muted" />
           </button>
         </div>
       </section>

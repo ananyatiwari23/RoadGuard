@@ -29,15 +29,15 @@ export const ConfidenceBar: React.FC<ConfidenceBarProps> = ({
     <div className={cn('w-full flex flex-col gap-1.5', className)}>
       {showLabel && (
         <div className="flex items-center justify-between text-xs font-mono">
-          <div className="flex items-center gap-1.5 text-slate-400">
-            <span className="text-[10px] uppercase tracking-[0.15em]">Confidence</span>
-            <span className="text-[10px] text-slate-500">(Gate: {threshold}%)</span>
+          <div className="flex items-center gap-1.5 text-muted">
+            <span className="text-[11px] uppercase tracking-wider">Confidence</span>
+            <span className="text-[10px] text-muted">(Gate: {threshold}%)</span>
           </div>
           <div className="flex items-center gap-1">
             <span
               className={cn(
                 'font-bold tracking-tight',
-                isAboveThreshold ? 'text-emerald-400' : 'text-amber-400'
+                isAboveThreshold ? 'text-sev-low' : 'text-hazard'
               )}
             >
               {clamped}%
@@ -49,24 +49,22 @@ export const ConfidenceBar: React.FC<ConfidenceBarProps> = ({
       {/* Progress track */}
       <div
         className={cn(
-          'w-full bg-[#121212] border border-white/[0.08] rounded-full overflow-hidden relative',
+          'w-full bg-surface-alt border border-border rounded-none overflow-hidden relative',
           HEIGHT_STYLES[size]
         )}
       >
         {/* 75% Threshold indicator line */}
         <div
-          className="absolute top-0 bottom-0 w-[2px] bg-white/30 z-10 pointer-events-none"
+          className="absolute top-0 bottom-0 w-[1px] bg-border-strong z-10 pointer-events-none"
           style={{ left: `${threshold}%` }}
           title={`Autonomous Gate: ${threshold}%`}
         />
 
-        {/* Animated fill */}
+        {/* Fill */}
         <div
           className={cn(
-            'h-full rounded-full transition-all duration-700 ease-out relative',
-            isAboveThreshold
-              ? 'bg-gradient-to-r from-emerald-500/80 to-emerald-400 shadow-[0_0_12px_rgba(48,164,108,0.4)]'
-              : 'bg-gradient-to-r from-amber-600/80 to-amber-400 shadow-[0_0_12px_rgba(245,165,36,0.3)]'
+            'h-full rounded-none transition-all duration-500 ease-out relative',
+            isAboveThreshold ? 'bg-sev-low' : 'bg-accent'
           )}
           style={{ width: `${clamped}%` }}
         />

@@ -12,121 +12,120 @@ export interface StatusBadgeProps {
   className?: string;
 }
 
-const STATUS_CONFIG: Record<
+const STATUS_STYLE_MAP: Record<
   BadgeStatus,
   { label: string; bg: string; text: string; border: string; dot: string; pulse?: boolean }
 > = {
-  // Agent & Inspection Pipeline States
   UPLOADED: {
     label: 'UPLOADED',
-    bg: 'bg-white/[0.04]',
-    text: 'text-slate-400',
-    border: 'border-white/[0.08]',
-    dot: 'bg-slate-400',
+    bg: 'bg-muted/10',
+    text: 'text-muted',
+    border: 'border-muted/30',
+    dot: 'bg-muted',
   },
   PROCESSING: {
     label: 'PROCESSING',
-    bg: 'bg-white/[0.06]',
-    text: 'text-slate-300',
-    border: 'border-white/10',
-    dot: 'bg-slate-300',
+    bg: 'bg-accent/10',
+    text: 'text-text font-bold',
+    border: 'border-accent/40',
+    dot: 'bg-accent',
     pulse: true,
   },
   OBSERVING: {
     label: 'OBSERVING',
-    bg: 'bg-sky-500/10',
-    text: 'text-sky-300',
-    border: 'border-sky-500/20',
-    dot: 'bg-sky-400',
+    bg: 'bg-accent/10',
+    text: 'text-text font-bold',
+    border: 'border-accent/40',
+    dot: 'bg-accent',
     pulse: true,
   },
   DETECTING: {
     label: 'DETECTING',
-    bg: 'bg-amber-500/10',
-    text: 'text-amber-300',
-    border: 'border-amber-500/20',
-    dot: 'bg-amber-400',
+    bg: 'bg-hazard/10',
+    text: 'text-hazard',
+    border: 'border-hazard/40',
+    dot: 'bg-hazard',
     pulse: true,
   },
   VERIFYING: {
     label: 'VERIFYING',
-    bg: 'bg-amber-500/10',
-    text: 'text-amber-300',
-    border: 'border-amber-500/20',
-    dot: 'bg-amber-400',
+    bg: 'bg-hazard/10',
+    text: 'text-hazard',
+    border: 'border-hazard/40',
+    dot: 'bg-hazard',
     pulse: true,
   },
   REINSPECTING: {
     label: 'RE-INSPECTING',
-    bg: 'bg-indigo-500/10',
-    text: 'text-indigo-300',
-    border: 'border-indigo-500/20',
-    dot: 'bg-indigo-400',
+    bg: 'bg-accent/10',
+    text: 'text-text font-bold',
+    border: 'border-accent/40',
+    dot: 'bg-accent',
     pulse: true,
   },
   ASSESSING: {
     label: 'ASSESSING',
-    bg: 'bg-purple-500/10',
-    text: 'text-purple-300',
-    border: 'border-purple-500/20',
-    dot: 'bg-purple-400',
+    bg: 'bg-hazard/10',
+    text: 'text-hazard',
+    border: 'border-hazard/40',
+    dot: 'bg-hazard',
     pulse: true,
   },
   REPORT_GENERATING: {
     label: 'GENERATING REPORT',
-    bg: 'bg-sky-500/10',
-    text: 'text-sky-300',
-    border: 'border-sky-500/20',
-    dot: 'bg-sky-400',
+    bg: 'bg-accent/10',
+    text: 'text-text font-bold',
+    border: 'border-accent/40',
+    dot: 'bg-accent',
     pulse: true,
   },
   WAITING_FOR_APPROVAL: {
     label: 'WAITING APPROVAL',
-    bg: 'bg-amber-500/15',
-    text: 'text-amber-300',
-    border: 'border-amber-500/30',
-    dot: 'bg-amber-400',
+    bg: 'bg-status-pending/10',
+    text: 'text-status-pending',
+    border: 'border-status-pending/40',
+    dot: 'bg-status-pending',
     pulse: true,
   },
   PENDING: {
     label: 'PENDING APPROVAL',
-    bg: 'bg-amber-500/15',
-    text: 'text-amber-300',
-    border: 'border-amber-500/30',
-    dot: 'bg-amber-400',
+    bg: 'bg-status-pending/10',
+    text: 'text-status-pending',
+    border: 'border-status-pending/40',
+    dot: 'bg-status-pending',
     pulse: true,
   },
   APPROVED: {
     label: 'APPROVED',
-    bg: 'bg-emerald-500/10',
-    text: 'text-emerald-300',
-    border: 'border-emerald-500/20',
-    dot: 'bg-emerald-400',
+    bg: 'bg-status-approved/10',
+    text: 'text-status-approved',
+    border: 'border-status-approved/40',
+    dot: 'bg-status-approved',
   },
   REJECTED: {
     label: 'REJECTED',
-    bg: 'bg-rose-500/10',
-    text: 'text-rose-300',
-    border: 'border-rose-500/20',
-    dot: 'bg-rose-400',
+    bg: 'bg-status-rejected/10',
+    text: 'text-status-rejected',
+    border: 'border-status-rejected/40',
+    dot: 'bg-status-rejected',
   },
   CLOSED: {
     label: 'CLOSED',
-    bg: 'bg-white/[0.03]',
-    text: 'text-slate-400',
-    border: 'border-white/[0.06]',
-    dot: 'bg-slate-500',
+    bg: 'bg-muted/10',
+    text: 'text-muted',
+    border: 'border-muted/30',
+    dot: 'bg-muted',
   },
 };
 
 const SIZE_STYLES = {
-  sm: 'text-[9px] px-2 py-0.5 gap-1.5',
-  md: 'text-[10px] px-2.5 py-1 gap-2',
+  sm: 'text-[10px] px-2 py-0.5 gap-1.5',
+  md: 'text-[11px] px-2.5 py-1 gap-2',
   lg: 'text-xs px-3 py-1.5 gap-2.5',
 };
 
 const DOT_SIZES = {
-  sm: 'w-1 h-1',
+  sm: 'w-1.5 h-1.5',
   md: 'w-1.5 h-1.5',
   lg: 'w-2 h-2',
 };
@@ -137,18 +136,18 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
   showDot = true,
   className,
 }) => {
-  const config = STATUS_CONFIG[status] || {
+  const config = STATUS_STYLE_MAP[status] || {
     label: status,
-    bg: 'bg-white/[0.04]',
-    text: 'text-slate-300',
-    border: 'border-white/10',
-    dot: 'bg-slate-400',
+    bg: 'bg-muted/10',
+    text: 'text-muted',
+    border: 'border-muted/30',
+    dot: 'bg-muted',
   };
 
   return (
     <span
       className={cn(
-        'inline-flex items-center font-mono uppercase tracking-[0.15em] rounded border transition-colors select-none font-medium',
+        'inline-flex items-center font-mono uppercase tracking-wider rounded-none border transition-colors select-none font-bold',
         config.bg,
         config.text,
         config.border,
@@ -159,7 +158,7 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
       {showDot && (
         <span
           className={cn(
-            'rounded-full shrink-0',
+            'rounded-none shrink-0',
             config.dot,
             DOT_SIZES[size],
             config.pulse && 'animate-pulse'

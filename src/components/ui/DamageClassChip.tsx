@@ -14,28 +14,28 @@ export interface DamageClassChipProps {
 
 const CLASS_ACCENTS: Record<DamageClass, { border: string; bg: string; text: string; dot: string }> = {
   D00: {
-    border: 'border-blue-500/30',
-    bg: 'bg-blue-500/10',
-    text: 'text-blue-300',
-    dot: 'bg-blue-400',
+    border: 'border-[#38BDF8]/40',
+    bg: 'bg-[#38BDF8]/10',
+    text: 'text-[#38BDF8]',
+    dot: 'bg-[#38BDF8]',
   },
   D10: {
-    border: 'border-cyan-500/30',
-    bg: 'bg-cyan-500/10',
-    text: 'text-cyan-300',
-    dot: 'bg-cyan-400',
+    border: 'border-[#2DD4BF]/40',
+    bg: 'bg-[#2DD4BF]/10',
+    text: 'text-[#2DD4BF]',
+    dot: 'bg-[#2DD4BF]',
   },
   D20: {
-    border: 'border-amber-500/30',
-    bg: 'bg-amber-500/10',
-    text: 'text-amber-300',
-    dot: 'bg-amber-400',
+    border: 'border-[#F59E0B]/40',
+    bg: 'bg-[#F59E0B]/10',
+    text: 'text-[#F59E0B]',
+    dot: 'bg-[#F59E0B]',
   },
   D40: {
-    border: 'border-rose-500/30',
-    bg: 'bg-rose-500/10',
-    text: 'text-rose-300',
-    dot: 'bg-rose-400',
+    border: 'border-[#E5484D]/40',
+    bg: 'bg-[#E5484D]/10',
+    text: 'text-[#E5484D]',
+    dot: 'bg-[#E5484D]',
   },
 };
 
@@ -57,24 +57,24 @@ export const DamageClassChip: React.FC<DamageClassChipProps> = ({
       tabIndex={onClick ? 0 : undefined}
       title={meta ? `${meta.label}: ${meta.description}` : damageClass}
       className={cn(
-        'inline-flex items-center gap-1.5 rounded font-mono transition-all duration-200 select-none border',
+        'inline-flex items-center gap-1.5 rounded-none font-mono transition-colors select-none border',
         accent.bg,
         accent.border,
-        onClick && 'cursor-pointer hover:border-white/40 active:scale-95',
-        active && 'ring-2 ring-white/40 bg-white/[0.08]',
+        onClick && 'cursor-pointer hover:border-border-strong',
+        active && 'border-border-strong ring-1 ring-border-strong',
         size === 'sm' ? 'px-2 py-0.5 text-[10px]' : 'px-2.5 py-1 text-xs',
         className
       )}
     >
-      <span className={cn('w-1.5 h-1.5 rounded-full shrink-0', accent.dot)} />
-      <span className="font-bold text-white tracking-wider">{damageClass}</span>
+      <span className={cn('w-1.5 h-1.5 rounded-none shrink-0', accent.dot)} />
+      <span className="font-bold text-text tracking-wider">{damageClass}</span>
       {meta && (
-        <span className={cn('font-normal opacity-90 truncate', accent.text)}>
+        <span className={cn('font-medium opacity-90 truncate', accent.text)}>
           {meta.label}
         </span>
       )}
       {showDescription && meta && (
-        <span className="text-[10px] text-slate-400 hidden sm:inline ml-1 border-l border-white/10 pl-1.5">
+        <span className="text-[10px] text-muted hidden sm:inline ml-1 border-l border-border pl-1.5">
           {meta.description}
         </span>
       )}

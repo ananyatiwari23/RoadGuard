@@ -42,10 +42,10 @@ export const BoundingBox: React.FC<BoundingBoxProps> = ({
         borderColor,
       }}
       className={cn(
-        'absolute border-2 transition-all duration-200 pointer-events-auto rounded-[2px]',
+        'absolute border-2 transition-colors pointer-events-auto rounded-none',
         isHovered
-          ? 'ring-2 ring-white shadow-[0_0_15px_rgba(255,255,255,0.4)] z-20'
-          : 'shadow-[0_0_10px_rgba(0,0,0,0.5)] z-10',
+          ? 'ring-1 ring-white z-20'
+          : 'z-10',
         onClick && 'cursor-pointer hover:border-white',
         className
       )}
@@ -60,7 +60,7 @@ export const BoundingBox: React.FC<BoundingBoxProps> = ({
       {(label || confidence !== undefined) && (
         <div
           style={{ backgroundColor: borderColor }}
-          className="absolute -top-6 left-0 px-1.5 py-0.5 rounded-[2px] text-[9px] font-mono font-bold text-white uppercase tracking-wider flex items-center gap-1 shadow-md whitespace-nowrap"
+          className="absolute -top-6 left-0 px-1.5 py-0.5 rounded-none text-[9px] font-mono font-bold text-white uppercase tracking-wider flex items-center gap-1 whitespace-nowrap"
         >
           {label && <span>{label}</span>}
           {confidence !== undefined && (

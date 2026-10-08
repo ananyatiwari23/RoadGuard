@@ -60,18 +60,18 @@ export const AgentWorkflow: React.FC<AgentWorkflowProps> = ({
   };
 
   return (
-    <div className={cn('w-full rounded-card glass-surface p-6', className)}>
+    <div className={cn('w-full rounded-none bg-surface border border-border p-6', className)}>
       {/* Header bar */}
-      <div className="flex items-center justify-between pb-5 mb-6 border-b border-white/[0.08]">
+      <div className="flex items-center justify-between pb-4 mb-6 border-b border-border">
         <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-          <h3 className="font-mono text-xs uppercase tracking-[0.2em] text-white font-bold">
+          <span className="w-2 h-2 rounded-none bg-sev-low" />
+          <h3 className="font-mono text-xs uppercase tracking-wider text-text font-bold">
             Autonomous Agent Inspection Pipeline
           </h3>
         </div>
-        <div className="flex items-center gap-2 font-mono text-[10px] text-slate-400">
-          <span className="uppercase tracking-[0.15em]">Active Stage:</span>
-          <span className="text-white font-bold px-2 py-0.5 rounded bg-white/[0.06] border border-white/10">
+        <div className="flex items-center gap-2 font-mono text-[10px] text-muted">
+          <span className="uppercase tracking-wider">Active Stage:</span>
+          <span className="text-text font-bold px-2 py-0.5 rounded-none bg-surface-alt border border-border">
             {currentStage}
           </span>
         </div>
@@ -83,33 +83,31 @@ export const AgentWorkflow: React.FC<AgentWorkflowProps> = ({
           const status = getStageStatus(item.stage);
           const Icon = item.icon;
           const isLast = idx === STAGE_CONFIG.length - 1;
-          const nextStatus = !isLast ? getStageStatus(STAGE_CONFIG[idx + 1].stage) : 'PENDING';
 
           return (
             <React.Fragment key={item.stage}>
               {/* Step Node */}
               <div className="flex md:flex-col items-center md:items-center gap-4 md:gap-2.5 z-10 group relative flex-1">
-                {/* Node Circle */}
+                {/* Node Square */}
                 <div
                   className={cn(
-                    'w-11 h-11 rounded-full flex items-center justify-center transition-all duration-300 relative shrink-0',
+                    'w-10 h-10 rounded-none flex items-center justify-center transition-colors relative shrink-0 border',
                     status === 'COMPLETED' &&
-                      'bg-white/[0.08] border-2 border-white/60 text-white shadow-[0_0_15px_rgba(255,255,255,0.15)]',
+                      'bg-sev-low border-sev-low text-white',
                     status === 'RUNNING' &&
-                      'bg-[#121212] border-2 border-white text-white shadow-[0_0_20px_rgba(255,255,255,0.25)] ring-4 ring-white/[0.12]',
+                      'bg-accent border-accent text-black font-bold',
                     status === 'FAILED' &&
-                      'bg-rose-500/10 border-2 border-rose-500 text-rose-400 shadow-[0_0_15px_rgba(229,72,77,0.2)]',
+                      'bg-sev-high border-sev-high text-white',
                     status === 'PENDING' &&
-                      'bg-[#0a0a0a] border border-white/[0.1] text-slate-500'
+                      'bg-surface border-border text-muted'
                   )}
                 >
                   {status === 'COMPLETED' ? (
                     <Check className="w-5 h-5 stroke-[2.5]" />
                   ) : status === 'RUNNING' ? (
-                    <>
-                      <Loader2 className="w-5 h-5 stroke-[2] animate-spin text-white absolute" />
-                      <Icon className="w-4 h-4 text-white/40" />
-                    </>
+                    <div className="flex items-center justify-center relative">
+                      <Loader2 className="w-5 h-5 stroke-[2.5] animate-spin text-black" />
+                    </div>
                   ) : status === 'FAILED' ? (
                     <X className="w-5 h-5 stroke-[2.5]" />
                   ) : (
@@ -122,29 +120,29 @@ export const AgentWorkflow: React.FC<AgentWorkflowProps> = ({
                   <div className="flex items-center gap-1.5 md:justify-center">
                     <span
                       className={cn(
-                        'font-mono text-xs font-bold uppercase tracking-[0.1em] transition-colors',
+                        'font-mono text-[11px] font-bold uppercase tracking-wider transition-colors',
                         status === 'RUNNING'
-                          ? 'text-white'
+                          ? 'text-text'
                           : status === 'COMPLETED'
-                          ? 'text-slate-200'
+                          ? 'text-text'
                           : status === 'FAILED'
-                          ? 'text-rose-400'
-                          : 'text-slate-500'
+                          ? 'text-sev-high'
+                          : 'text-muted'
                       )}
                     >
                       {item.label}
                     </span>
                   </div>
-                  <span className="text-[10px] text-slate-400 font-sans truncate hidden sm:block">
+                  <span className="text-[10px] text-muted font-sans truncate hidden sm:block">
                     {item.description}
                   </span>
                   <span
                     className={cn(
                       'font-mono text-[9px] uppercase tracking-wider mt-0.5 font-semibold',
-                      status === 'COMPLETED' && 'text-emerald-400',
-                      status === 'RUNNING' && 'text-white',
-                      status === 'FAILED' && 'text-rose-400',
-                      status === 'PENDING' && 'text-slate-600'
+                      status === 'COMPLETED' && 'text-sev-low',
+                      status === 'RUNNING' && 'text-hazard',
+                      status === 'FAILED' && 'text-sev-high',
+                      status === 'PENDING' && 'text-muted'
                     )}
                   >
                     {status}
@@ -152,31 +150,29 @@ export const AgentWorkflow: React.FC<AgentWorkflowProps> = ({
                 </div>
               </div>
 
-              {/* Connecting Line (Horizontal on desktop, vertical on mobile) */}
+              {/* Connecting Line */}
               {!isLast && (
                 <div className="md:flex-1 flex md:items-center justify-center my-[-4px] md:my-0 md:mx-[-8px] z-0">
                   {/* Desktop horizontal connector */}
-                  <div className="hidden md:block w-full h-[2px] relative overflow-hidden bg-white/[0.08] rounded-full">
+                  <div className="hidden md:block w-full h-[1px] bg-border relative">
                     <div
                       className={cn(
-                        'h-full transition-all duration-700',
+                        'h-full transition-all duration-500',
                         status === 'COMPLETED'
-                          ? nextStatus === 'PENDING'
-                            ? 'w-full bg-gradient-to-r from-white/70 to-white/20'
-                            : 'w-full bg-white/70'
+                          ? 'w-full bg-border-strong'
                           : status === 'RUNNING'
-                          ? 'w-1/2 bg-gradient-to-r from-white to-transparent animate-pulse'
+                          ? 'w-1/2 bg-accent'
                           : 'w-0'
                       )}
                     />
                   </div>
 
                   {/* Mobile vertical connector */}
-                  <div className="md:hidden w-[2px] h-6 ml-5 my-1 bg-white/[0.08]">
+                  <div className="md:hidden w-[1px] h-6 ml-5 my-1 bg-border">
                     <div
                       className={cn(
-                        'w-full transition-all duration-700',
-                        status === 'COMPLETED' ? 'h-full bg-white/70' : 'h-0'
+                        'w-full transition-all duration-500',
+                        status === 'COMPLETED' ? 'h-full bg-border-strong' : 'h-0'
                       )}
                     />
                   </div>

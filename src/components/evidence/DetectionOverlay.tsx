@@ -33,7 +33,7 @@ export const DetectionOverlay: React.FC<DetectionOverlayProps> = ({
   return (
     <div
       className={cn(
-        'relative rounded-card overflow-hidden bg-black select-none aspect-[16/9] border border-white/[0.08]',
+        'relative rounded-none overflow-hidden bg-black select-none aspect-[16/9] border border-border',
         className
       )}
     >
@@ -44,9 +44,6 @@ export const DetectionOverlay: React.FC<DetectionOverlayProps> = ({
         className="w-full h-full object-cover block"
         loading="lazy"
       />
-
-      {/* Crosshair grid overlay accent */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20 pointer-events-none" />
 
       {/* Render Bounding Boxes */}
       {detections.map((det) => {

@@ -23,33 +23,33 @@ export const PersistenceIndicator: React.FC<PersistenceIndicatorProps> = ({
   return (
     <div
       className={cn(
-        'inline-flex items-center gap-3 rounded-lg bg-white/[0.03] border border-white/[0.08] px-3 py-1.5 font-mono select-none',
+        'inline-flex items-center gap-3 rounded-none bg-surface border border-border px-3 py-1.5 font-mono select-none',
         className
       )}
     >
       {showIcon && (
-        <div className="flex items-center text-slate-400">
+        <div className="flex items-center text-muted">
           {isSatisfied ? (
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 stroke-[2]" />
+            <ShieldCheck className="w-3.5 h-3.5 text-sev-low stroke-[2]" />
           ) : (
-            <Layers className="w-3.5 h-3.5 text-slate-400 stroke-[1.75]" />
+            <Layers className="w-3.5 h-3.5 text-muted stroke-[1.75]" />
           )}
         </div>
       )}
 
       {/* Label and Count */}
       <div className="flex items-center gap-1.5 text-xs">
-        <span className="text-[10px] uppercase tracking-wider text-slate-400 font-medium">
+        <span className="text-[10px] uppercase tracking-wider text-muted font-medium">
           Persistence:
         </span>
-        <span className="font-bold text-white tracking-tight">
+        <span className="font-bold text-text tracking-tight">
           {count} / {total}
         </span>
-        <span className="text-[10px] text-slate-500">frames</span>
+        <span className="text-[10px] text-muted">frames</span>
       </div>
 
-      {/* Visual Dot Sequence */}
-      <div className="flex items-center gap-1.5 pl-1 border-l border-white/10">
+      {/* Visual Square Dot Sequence */}
+      <div className="flex items-center gap-1.5 pl-1 border-l border-border">
         {Array.from({ length: total }).map((_, idx) => {
           const filled = idx < count;
           return (
@@ -57,12 +57,12 @@ export const PersistenceIndicator: React.FC<PersistenceIndicatorProps> = ({
               key={idx}
               title={`Frame ${idx + 1}`}
               className={cn(
-                'w-2 h-2 rounded-full transition-all duration-300',
+                'w-2 h-2 rounded-none transition-colors',
                 filled
                   ? isSatisfied
-                    ? 'bg-emerald-400 shadow-[0_0_6px_rgba(48,164,108,0.6)]'
-                    : 'bg-amber-400 shadow-[0_0_6px_rgba(245,165,36,0.4)]'
-                  : 'bg-white/10 border border-white/[0.08]'
+                    ? 'bg-sev-low'
+                    : 'bg-hazard'
+                  : 'bg-surface-alt border border-border'
               )}
             />
           );
@@ -72,12 +72,12 @@ export const PersistenceIndicator: React.FC<PersistenceIndicatorProps> = ({
       {status && (
         <span
           className={cn(
-            'text-[9px] uppercase px-1.5 py-0.5 rounded font-bold tracking-wider ml-1',
+            'text-[9px] uppercase px-1.5 py-0.5 rounded-none font-bold tracking-wider ml-1 font-mono border',
             status === 'CONFIRMED'
-              ? 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/20'
+              ? 'bg-sev-low/10 text-sev-low border-sev-low/40'
               : status === 'DETECTED'
-              ? 'bg-amber-500/10 text-amber-300 border border-amber-500/20'
-              : 'bg-white/[0.04] text-slate-400 border border-white/10'
+              ? 'bg-hazard/10 text-hazard border-hazard/40'
+              : 'bg-surface-alt text-muted border-border'
           )}
         >
           {status}

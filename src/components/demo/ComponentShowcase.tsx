@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import type { InspectionStatus, WorkflowStage, WorkflowStageStatus, AgentEvent, AgentState } from '../../types/agent';
+import type { InspectionStatus, WorkflowStage, WorkflowStageStatus, AgentState } from '../../types/agent';
 import type { Severity, DamageClass } from '../../types/inspection';
 import type { ReportStatus, Report } from '../../types/report';
 import { StatusBadge } from '../ui/StatusBadge';
@@ -13,9 +13,7 @@ import { ErrorState } from '../ui/ErrorState';
 import { AgentWorkflow } from '../agent/AgentWorkflow';
 import { EventLog } from '../agent/EventLog';
 import { AgentDecisionCard } from '../agent/AgentDecisionCard';
-import { BoundingBox } from '../evidence/BoundingBox';
 import { DetectionOverlay } from '../evidence/DetectionOverlay';
-import { FrameThumbnail } from '../evidence/FrameThumbnail';
 import { FrameTimeline } from '../evidence/FrameTimeline';
 import { PersistenceIndicator } from '../evidence/PersistenceIndicator';
 import { EvidenceGallery } from '../evidence/EvidenceGallery';
@@ -24,7 +22,7 @@ import { SeverityAssessmentCard } from '../inspection/SeverityAssessmentCard';
 import { ApprovalCard } from '../inspection/ApprovalCard';
 import { ReportPreview } from '../inspection/ReportPreview';
 import { DEMO_EVIDENCE_FRAMES, DEMO_AGENT_EVENTS, DEMO_REPORT } from '../../services/mock/demoInspection';
-import { Activity, Shield, Cpu, Gauge, Zap } from 'lucide-react';
+import { Shield, Cpu, Gauge, Zap } from 'lucide-react';
 
 const ALL_STATUSES: (InspectionStatus | ReportStatus)[] = [
   'UPLOADED',
@@ -104,34 +102,34 @@ export const ComponentShowcase: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16">
       {/* Page Header */}
-      <div className="border-b border-white/[0.08] pb-6">
+      <div className="border-b border-border pb-6">
         <div className="flex items-center gap-2 mb-2">
-          <Zap className="w-5 h-5 text-amber-400" />
-          <span className="font-mono text-xs uppercase tracking-[0.25em] text-slate-400">
+          <Zap className="w-5 h-5 text-accent" />
+          <span className="font-mono text-xs uppercase tracking-wider text-muted">
             RoadGuard Design System
           </span>
         </div>
-        <h1 className="text-3xl font-bold font-mono tracking-tight text-white mb-2">
+        <h1 className="text-3xl font-bold font-mono tracking-tight text-text mb-2">
           Shared Components Showcase
         </h1>
-        <p className="text-slate-400 font-sans text-sm">
+        <p className="text-muted font-sans text-sm">
           Interactive verification suite for all reusable UI, Agent, Evidence, and Inspection components.
         </p>
       </div>
 
       {/* SECTION 1: Status & Severity Badges */}
       <section className="space-y-6">
-        <div className="border-b border-white/[0.06] pb-2">
-          <h2 className="font-mono text-sm uppercase tracking-[0.2em] text-white font-bold">
+        <div className="border-b border-border pb-2">
+          <h2 className="font-mono text-sm uppercase tracking-wider text-text font-bold">
             01. Badges & Micro-Indicators
           </h2>
         </div>
 
         <div className="space-y-4">
-          <h3 className="text-xs font-mono text-slate-400 uppercase tracking-wider">
+          <h3 className="text-xs font-mono text-muted uppercase tracking-wider font-medium">
             All StatusBadge States (12 InspectionStatus + 1 ReportStatus)
           </h3>
-          <div className="flex flex-wrap gap-2.5 p-4 rounded-card glass-surface">
+          <div className="flex flex-wrap gap-2.5 p-4 rounded-none bg-surface border border-border">
             {ALL_STATUSES.map((st) => (
               <StatusBadge key={st} status={st} />
             ))}
@@ -139,10 +137,10 @@ export const ComponentShowcase: React.FC = () => {
         </div>
 
         <div className="space-y-4">
-          <h3 className="text-xs font-mono text-slate-400 uppercase tracking-wider">
+          <h3 className="text-xs font-mono text-muted uppercase tracking-wider font-medium">
             SeverityBadge States
           </h3>
-          <div className="flex flex-wrap gap-3 p-4 rounded-card glass-surface items-center">
+          <div className="flex flex-wrap gap-3 p-4 rounded-none bg-surface border border-border items-center">
             {ALL_SEVERITIES.map((sev) => (
               <SeverityBadge key={sev} severity={sev} showIcon />
             ))}
@@ -153,10 +151,10 @@ export const ComponentShowcase: React.FC = () => {
         </div>
 
         <div className="space-y-4">
-          <h3 className="text-xs font-mono text-slate-400 uppercase tracking-wider">
+          <h3 className="text-xs font-mono text-muted uppercase tracking-wider font-medium">
             DamageClassChip (D00, D10, D20, D40)
           </h3>
-          <div className="flex flex-wrap gap-3 p-4 rounded-card glass-surface">
+          <div className="flex flex-wrap gap-3 p-4 rounded-none bg-surface border border-border">
             {ALL_DAMAGE_CLASSES.map((dc) => (
               <DamageClassChip key={dc} damageClass={dc} showDescription />
             ))}
@@ -166,17 +164,17 @@ export const ComponentShowcase: React.FC = () => {
 
       {/* SECTION 2: Metric Cards & Confidence Progress */}
       <section className="space-y-6">
-        <div className="border-b border-white/[0.06] pb-2">
-          <h2 className="font-mono text-sm uppercase tracking-[0.2em] text-white font-bold">
+        <div className="border-b border-border pb-2">
+          <h2 className="font-mono text-sm uppercase tracking-wider text-text font-bold">
             02. Confidence & Metrics
           </h2>
         </div>
 
         <div className="space-y-4">
-          <h3 className="text-xs font-mono text-slate-400 uppercase tracking-wider">
+          <h3 className="text-xs font-mono text-muted uppercase tracking-wider font-medium">
             ConfidenceBar at 20%, 62%, 88%, 95% (75% Autonomous Gate)
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-5 rounded-card glass-surface">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-5 rounded-none bg-surface border border-border">
             <ConfidenceBar confidence={20} />
             <ConfidenceBar confidence={62} />
             <ConfidenceBar confidence={88} />
@@ -185,7 +183,7 @@ export const ComponentShowcase: React.FC = () => {
         </div>
 
         <div className="space-y-4">
-          <h3 className="text-xs font-mono text-slate-400 uppercase tracking-wider">
+          <h3 className="text-xs font-mono text-muted uppercase tracking-wider font-medium">
             MetricCard Examples
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -223,8 +221,8 @@ export const ComponentShowcase: React.FC = () => {
 
       {/* SECTION 3: Agent Workflow Stepper & Reasoning Feed */}
       <section className="space-y-6">
-        <div className="border-b border-white/[0.06] pb-2">
-          <h2 className="font-mono text-sm uppercase tracking-[0.2em] text-white font-bold">
+        <div className="border-b border-border pb-2">
+          <h2 className="font-mono text-sm uppercase tracking-wider text-text font-bold">
             03. Agent Stepper & Event Log
           </h2>
         </div>
@@ -232,21 +230,21 @@ export const ComponentShowcase: React.FC = () => {
         {/* Workflow Scenarios */}
         <div className="space-y-6">
           <div>
-            <h3 className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-2">
+            <h3 className="text-xs font-mono text-muted uppercase tracking-wider mb-2 font-medium">
               (a) AgentWorkflow: Mid-Run (OBSERVE Completed, VERIFY Running)
             </h3>
             <AgentWorkflow currentStage="VERIFY" workflowStages={midRunStages} />
           </div>
 
           <div>
-            <h3 className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-2">
+            <h3 className="text-xs font-mono text-muted uppercase tracking-wider mb-2 font-medium">
               (b) AgentWorkflow: Complete (All 6 Stages Completed)
             </h3>
             <AgentWorkflow currentStage="HUMAN_REVIEW" workflowStages={completeStages} />
           </div>
 
           <div>
-            <h3 className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-2">
+            <h3 className="text-xs font-mono text-muted uppercase tracking-wider mb-2 font-medium">
               (c) AgentWorkflow: Failed (ASSESS Stage Failed)
             </h3>
             <AgentWorkflow currentStage="ASSESS" workflowStages={failedStages} />
@@ -256,14 +254,14 @@ export const ComponentShowcase: React.FC = () => {
         {/* EventLog with 8 events */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-4">
           <div>
-            <h3 className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-2">
+            <h3 className="text-xs font-mono text-muted uppercase tracking-wider mb-2 font-medium">
               EventLog (8 Sample Autonomous Events)
             </h3>
             <EventLog events={DEMO_AGENT_EVENTS.slice(0, 8)} />
           </div>
 
           <div>
-            <h3 className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-2">
+            <h3 className="text-xs font-mono text-muted uppercase tracking-wider mb-2 font-medium">
               AgentDecisionCard
             </h3>
             <AgentDecisionCard state={sampleAgentState} confidence={74} />
@@ -273,17 +271,17 @@ export const ComponentShowcase: React.FC = () => {
 
       {/* SECTION 4: Evidence, Overlays, and Scrubbing */}
       <section className="space-y-6">
-        <div className="border-b border-white/[0.06] pb-2">
-          <h2 className="font-mono text-sm uppercase tracking-[0.2em] text-white font-bold">
+        <div className="border-b border-border pb-2">
+          <h2 className="font-mono text-sm uppercase tracking-wider text-text font-bold">
             04. Evidence & Video Scrubbing
           </h2>
         </div>
 
         <div className="space-y-4">
-          <h3 className="text-xs font-mono text-slate-400 uppercase tracking-wider">
+          <h3 className="text-xs font-mono text-muted uppercase tracking-wider font-medium">
             Persistence Indicator
           </h3>
-          <div className="flex flex-wrap gap-4 p-4 rounded-card glass-surface items-center">
+          <div className="flex flex-wrap gap-4 p-4 rounded-none bg-surface border border-border items-center">
             <PersistenceIndicator count={1} total={7} status="POSSIBLE" />
             <PersistenceIndicator count={4} total={7} status="DETECTED" />
             <PersistenceIndicator count={7} total={7} status="CONFIRMED" />
@@ -292,7 +290,7 @@ export const ComponentShowcase: React.FC = () => {
 
         {/* Frame Timeline */}
         <div className="space-y-2">
-          <h3 className="text-xs font-mono text-slate-400 uppercase tracking-wider">
+          <h3 className="text-xs font-mono text-muted uppercase tracking-wider font-medium">
             FrameTimeline (7 Frames from Demo Inspection)
           </h3>
           <FrameTimeline
@@ -304,7 +302,7 @@ export const ComponentShowcase: React.FC = () => {
 
         {/* Single Frame Detection Overlay */}
         <div className="space-y-2">
-          <h3 className="text-xs font-mono text-slate-400 uppercase tracking-wider">
+          <h3 className="text-xs font-mono text-muted uppercase tracking-wider font-medium">
             DetectionOverlay (Active Frame #{activeFrameNum})
           </h3>
           <div className="max-w-2xl">
@@ -321,7 +319,7 @@ export const ComponentShowcase: React.FC = () => {
 
         {/* Evidence Gallery */}
         <div className="space-y-2">
-          <h3 className="text-xs font-mono text-slate-400 uppercase tracking-wider">
+          <h3 className="text-xs font-mono text-muted uppercase tracking-wider font-medium">
             EvidenceGallery (7 Frames with Lightbox)
           </h3>
           <EvidenceGallery frames={DEMO_EVIDENCE_FRAMES} />
@@ -330,8 +328,8 @@ export const ComponentShowcase: React.FC = () => {
 
       {/* SECTION 5: Inspection Cards & Human Approval */}
       <section className="space-y-6">
-        <div className="border-b border-white/[0.06] pb-2">
-          <h2 className="font-mono text-sm uppercase tracking-[0.2em] text-white font-bold">
+        <div className="border-b border-border pb-2">
+          <h2 className="font-mono text-sm uppercase tracking-wider text-text font-bold">
             05. Inspection Panels & Human Review
           </h2>
         </div>
@@ -352,13 +350,13 @@ export const ComponentShowcase: React.FC = () => {
 
         {/* ApprovalCard in 3 states */}
         <div className="space-y-4">
-          <h3 className="text-xs font-mono text-slate-400 uppercase tracking-wider">
+          <h3 className="text-xs font-mono text-muted uppercase tracking-wider font-medium">
             ApprovalCard in 3 Lifecycle States
           </h3>
 
           <div className="space-y-6">
             <div>
-              <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest block mb-2">
+              <span className="text-[10px] font-mono text-muted uppercase tracking-wider block mb-2">
                 1. Default Waiting For Approval (Pending Review)
               </span>
               <ApprovalCard
@@ -375,7 +373,7 @@ export const ComponentShowcase: React.FC = () => {
             </div>
 
             <div>
-              <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest block mb-2">
+              <span className="text-[10px] font-mono text-muted uppercase tracking-wider block mb-2">
                 2. Approved State
               </span>
               <ApprovalCard
@@ -391,7 +389,7 @@ export const ComponentShowcase: React.FC = () => {
             </div>
 
             <div>
-              <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest block mb-2">
+              <span className="text-[10px] font-mono text-muted uppercase tracking-wider block mb-2">
                 3. Rejected State
               </span>
               <ApprovalCard
@@ -410,7 +408,7 @@ export const ComponentShowcase: React.FC = () => {
 
         {/* Report Preview */}
         <div className="space-y-2">
-          <h3 className="text-xs font-mono text-slate-400 uppercase tracking-wider">
+          <h3 className="text-xs font-mono text-muted uppercase tracking-wider font-medium">
             ReportPreview Card (Used on Reports & Dashboard)
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -423,8 +421,8 @@ export const ComponentShowcase: React.FC = () => {
 
       {/* SECTION 6: Empty, Error & Loading States */}
       <section className="space-y-6">
-        <div className="border-b border-white/[0.06] pb-2">
-          <h2 className="font-mono text-sm uppercase tracking-[0.2em] text-white font-bold">
+        <div className="border-b border-border pb-2">
+          <h2 className="font-mono text-sm uppercase tracking-wider text-text font-bold">
             06. Utility States (Empty, Loading, Error)
           </h2>
         </div>
@@ -432,7 +430,7 @@ export const ComponentShowcase: React.FC = () => {
         {/* Empty States */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest block mb-2">
+            <span className="text-[10px] font-mono text-muted uppercase tracking-wider block mb-2">
               EmptyState with CTA
             </span>
             <EmptyState
@@ -446,7 +444,7 @@ export const ComponentShowcase: React.FC = () => {
           </div>
 
           <div>
-            <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest block mb-2">
+            <span className="text-[10px] font-mono text-muted uppercase tracking-wider block mb-2">
               EmptyState without CTA
             </span>
             <EmptyState
@@ -458,7 +456,7 @@ export const ComponentShowcase: React.FC = () => {
 
         {/* Error State */}
         <div>
-          <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest block mb-2">
+          <span className="text-[10px] font-mono text-muted uppercase tracking-wider block mb-2">
             ErrorState with Retry Callback
           </span>
           <ErrorState
@@ -469,7 +467,7 @@ export const ComponentShowcase: React.FC = () => {
             }}
           />
           {retryNotice && (
-            <div className="mt-2 text-xs font-mono text-emerald-400 p-2 rounded bg-emerald-500/10 border border-emerald-500/20 text-center">
+            <div className="mt-2 text-xs font-mono text-sev-low p-2 rounded-none bg-sev-low/10 border border-sev-low/30 text-center">
               {retryNotice}
             </div>
           )}
@@ -478,7 +476,7 @@ export const ComponentShowcase: React.FC = () => {
         {/* Loading States in 3 variants */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest">
+            <span className="text-[10px] font-mono text-muted uppercase tracking-wider">
               LoadingState Skeletons
             </span>
             <div className="flex items-center gap-2">
@@ -486,10 +484,10 @@ export const ComponentShowcase: React.FC = () => {
                 <button
                   key={tab}
                   onClick={() => setActiveLoadingTab(tab)}
-                  className={`px-3 py-1 rounded text-xs font-mono uppercase tracking-wider transition-colors cursor-pointer ${
+                  className={`px-3 py-1 rounded-none text-xs font-mono uppercase tracking-wider transition-colors cursor-pointer border ${
                     activeLoadingTab === tab
-                      ? 'bg-white text-black font-bold'
-                      : 'bg-white/[0.05] text-slate-400 hover:text-white'
+                      ? 'bg-text text-bg border-border-strong font-bold'
+                      : 'bg-surface text-muted hover:text-text border-border'
                   }`}
                 >
                   {tab}

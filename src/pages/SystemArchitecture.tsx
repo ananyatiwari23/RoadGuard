@@ -1,20 +1,9 @@
 import React, { useState } from 'react';
 import {
-  Camera,
-  Cloud,
-  Cpu,
-  Zap,
-  Bot,
-  UserCheck,
   ArrowDown,
-  Layers,
-  Database,
-  ShieldCheck,
   Server,
   Code,
   CheckCircle2,
-  ChevronRight,
-  ExternalLink,
 } from 'lucide-react';
 
 interface ArchitectureNode {
@@ -98,26 +87,27 @@ const ARCHITECTURE_NODES: ArchitectureNode[] = [
     category: 'COMPUTE',
     stepNumber: '03',
     title: 'AWS Graviton3 Hardware Acceleration',
-    subtitle: 'ARM64 c7g.4xlarge Dedicated Fleet',
+    subtitle: 'ARM Neoverse V1 SIMD Vector Processing',
     description:
-      'Custom 64-bit ARM Neoverse V1 cores with NEON SIMD vectorization units delivering 3.42x latency improvement and 73.8% cost savings versus legacy x86.',
-    techStack: ['AWS Graviton3 (ARM64)', 'NEON SIMD Registers', 'bfloat16 & INT8', 'Amazon Linux 2023'],
-    latency: '14.1 ms per frame',
-    protocols: 'PCIe 5.0 / DDR5 Memory Bus',
+      'Cost-optimized computing on AWS c7g.2xlarge instances delivering 3.42x faster inference and 73.8% cost savings versus legacy x86_64 nodes.',
+    techStack: ['AWS Graviton3 (ARM64)', 'NEON Vector Instructions', 'c7g.2xlarge Instances', 'Linux Kernel 6.5'],
+    latency: '14.1 ms per 4K frame',
+    protocols: 'PCIe 4.0 / AWS Nitro Enclaves',
     details: {
-      purpose: 'Deliver high-throughput tensor and image filtering operations at lowest cloud wattage and cost per mile.',
-      inputs: 'Decoded video frames loaded directly into memory.',
-      outputs: 'Vectorized tensor buffers ready for OpenCV 5 graph kernels.',
-      failureHandling: 'Auto-scaling group with minimum 2 instances in multi-AZ configuration.',
+      purpose: 'Slash high-throughput computer vision processing costs by leveraging ARM NEON vectorized hardware instructions.',
+      inputs: 'Decompressed YUV420 frame tensors.',
+      outputs: 'Feature-extracted bounding box candidates with confidence tensors.',
+      failureHandling: 'Auto-scaling group across 3 Availability Zones maintains minimum 99.95% uptime SLA.',
     },
-    codeSnippet: `// ARM NEON Vectorized Kernel (C++ / OpenCV)
+    codeSnippet: `// ARM NEON Vector SIMD Micro-Kernel
 #include <arm_neon.h>
-void apply_contrast_neon(uint8_t* src, uint8_t* dst, int len) {
-  uint8x16_t vscale = vdupq_n_u8(1.2f);
+
+void neon_distress_filter_kernel(const uint8_t* src, uint8_t* dst, int len) {
   for (int i = 0; i < len; i += 16) {
-    uint8x16_t data = vld1q_u8(src + i);
-    uint8x16_t result = vqmulq_u8(data, vscale);
-    vst1q_u8(dst + i, result);
+    uint8x16_t pix = vld1q_u8(src + i);
+    uint8x16_t threshold = vdupq_n_u8(42);
+    uint8x16_t mask = vcgtq_u8(pix, threshold);
+    vst1q_u8(dst + i, mask);
   }
 }`,
   },
@@ -125,38 +115,37 @@ void apply_contrast_neon(uint8_t* src, uint8_t* dst, int len) {
     id: 'opencv-cool',
     category: 'VISION',
     stepNumber: '04',
-    title: 'OpenCV 5 COOL Vision Engine',
-    subtitle: 'Optimized Pavement Anomaly Detection',
+    title: 'OpenCV 5 COOL Kernel Engine',
+    subtitle: 'Graph API & Computer Vision Optimization',
     description:
-      'Computer Vision Optimization & Open-Source Library (COOL) pipeline executing CLAHE filtering, contour analysis, and YOLOv8 INT8 quantization.',
-    techStack: ['OpenCV 5.0.0 (COOL)', 'Graph API (G-API)', 'INT8 Quantization', 'Soft-NMS Filter'],
-    latency: '8.4 ms detector pass',
-    protocols: 'In-Memory G-API Pipelines',
+      'G-API accelerated computation graph that fuses road-filtering kernels, normalizes varying lighting and wet surfaces, and extracts RDD2022 distress candidates.',
+    techStack: ['OpenCV 5.0.0 (COOL)', 'G-API Computation Graph', 'INT8 Post-Training Quantization', 'NEON Backend'],
+    latency: '70.9 frames / sec',
+    protocols: 'In-Memory Zero-Copy Ring Buffer',
     details: {
-      purpose: 'Filter environmental noise (rain reflections, shadows) and localize distress anomalies with pixel-level precision.',
-      inputs: 'Raw asphalt image frames.',
-      outputs: 'Bounding boxes, class probabilities (D00-D40), and visual contour overlays.',
-      failureHandling: 'Graceful fallback to standard bilateral filter if specular glare saturates camera sensor.',
+      purpose: 'Execute deterministic image filtering, edge extraction, and defect proposal generation at line rate.',
+      inputs: '4K raw frames sharded from edge upload chunks.',
+      outputs: 'Predicted bounding boxes, RDD2022 classifications (D00-D40), and candidate masks.',
+      failureHandling: 'Adaptive contrast fallback if over-exposure or nighttime glare is detected.',
     },
-    codeSnippet: `// OpenCV 5 G-API Pipeline Definition
-cv::GComputation pipeline([]() {
-  cv::GMat in;
-  cv::GMat preprocessed = cv::gapi::equalizeHist(in);
-  cv::GMat edges = cv::gapi::Canny(preprocessed, 50, 150);
-  cv::GOpaque<Detections> out = cv::gapi::infer<RDDNet>(preprocessed);
-  return cv::GComputation(cv::GIn(in), cv::GOut(out, edges));
-});`,
+    codeSnippet: `// OpenCV 5 COOL G-API Computation Pipeline
+cv::GMat in;
+auto blurred    = cv::gapi::gaussianBlur(in, cv::Size(5, 5), 1.5);
+auto edges      = cv::gapi::Canny(blurred, 50, 150);
+auto candidates = roadguard::cool::extractDamageRegions(edges);
+cv::GComputation pipeline(cv::GIn(in), cv::GOut(candidates));
+pipeline.compile(cv::compile_args(cv::gapi::use_only{roadguard::cool::backend()}));`,
   },
   {
     id: 'agentic-loop',
     category: 'AGENT',
     stepNumber: '05',
-    title: 'RoadGuard Agentic Decision Loop',
-    subtitle: 'Multi-Frame Temporal Persistence Engine',
+    title: 'Autonomous Multi-Frame Reasoning Loop',
+    subtitle: 'State Machine & Temporal Consensus Gate',
     description:
-      'Multi-stage agent that observes initial candidates, verifies confidence, requests re-inspection buffers when uncertain, and confirms persistence across consecutive frames.',
-    techStack: ['Temporal Voting Engine', 'Markov Decision Process', 'Severity Scorer', 'Rule Engine'],
-    latency: '22 ms consensus loop',
+      'Autonomous supervisor engine executing the 6-stage lifecycle (Observe → Verify → Recheck → Assess → Report → Human Review). Filters single-frame visual artifacts.',
+    techStack: ['State Machine Engine', 'Temporal Consensus Buffer', 'Confidence Gate (75%)', 'Multi-Frame Voting'],
+    latency: '240 ms complete sequence',
     protocols: 'State Machine Event Stream',
     details: {
       purpose: 'Eliminate false positives by requiring damage to persist across temporal frames before generating work orders.',
@@ -223,28 +212,28 @@ export const SystemArchitecture: React.FC = () => {
   return (
     <div className="space-y-12 animate-in fade-in duration-700">
       {/* Header */}
-      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-6 border-b border-white/[0.08]">
+      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-6 border-b border-border">
         <div>
-          <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-slate-500 mb-2">
+          <div className="font-mono text-[11px] uppercase tracking-wider text-muted mb-2 font-medium">
             CLOUD & HARDWARE PIPELINE SPECIFICATION // SYSTEM TOPOLOGY
           </div>
-          <h1 className="font-sans font-semibold text-4xl sm:text-5xl tracking-tighter leading-[0.9] text-white">
+          <h1 className="font-sans font-bold text-4xl sm:text-5xl tracking-tight text-text">
             System Architecture
           </h1>
-          <p className="text-slate-400 text-sm mt-3 font-light max-w-2xl font-sans">
+          <p className="text-muted text-sm mt-3 font-normal max-w-2xl font-sans leading-relaxed">
             End-to-end telemetry overview tracing data flow from edge patrol fleet to AWS Graviton3 compute, OpenCV 5 COOL accelerated kernels, the agentic reasoning loop, and human supervisory sign-off.
           </p>
         </div>
 
-        <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.15em] text-slate-400 bg-white/[0.03] border border-white/10 px-4 py-2 rounded-card">
-          <Server className="w-3.5 h-3.5 text-slate-400" />
+        <div className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-wider text-text bg-surface-alt border border-border px-4 py-2 rounded-none">
+          <Server className="w-3.5 h-3.5 text-muted" />
           <span>PRODUCTION BLUEPRINT v2.4</span>
         </div>
       </div>
 
       {/* Category Filter Pills */}
       <div className="flex flex-wrap items-center gap-2">
-        <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-slate-500 mr-2">
+        <span className="font-mono text-[10px] uppercase tracking-wider text-muted mr-2 font-medium">
           FOCUS LAYER:
         </span>
         {[
@@ -259,10 +248,10 @@ export const SystemArchitecture: React.FC = () => {
           <button
             key={btn.id}
             onClick={() => setFilterCategory(btn.id)}
-            className={`font-mono text-[11px] uppercase tracking-[0.2em] px-3.5 py-1.5 rounded-lg transition-all ${
+            className={`font-mono text-[11px] uppercase tracking-wider px-3.5 py-1.5 rounded-none transition-colors cursor-pointer border ${
               filterCategory === btn.id
-                ? 'bg-white/15 text-white font-bold border border-white/20'
-                : 'text-slate-400 hover:text-white border border-transparent'
+                ? 'bg-text text-bg border-border-strong font-bold'
+                : 'bg-surface text-muted hover:text-text border-border'
             }`}
           >
             {btn.label}
@@ -281,42 +270,42 @@ export const SystemArchitecture: React.FC = () => {
                 {/* Node Card */}
                 <div
                   onClick={() => setSelectedNode(node)}
-                  className={`p-6 rounded-card transition-all cursor-pointer border ${
+                  className={`p-6 rounded-none transition-colors cursor-pointer border ${
                     isSelected
-                      ? 'bg-white/[0.06] border-white/30 shadow-[0_0_25px_rgba(255,255,255,0.06)]'
-                      : 'glass-surface border-white/[0.08] hover:border-white/20 hover:bg-white/[0.03]'
+                      ? 'bg-surface-alt border-border-strong'
+                      : 'bg-surface border-border hover:border-border-strong hover:bg-surface-alt/50'
                   }`}
                 >
                   <div className="flex items-start justify-between gap-4 mb-3">
                     <div className="flex items-center gap-3">
-                      <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-white/[0.08] text-white border border-white/15">
+                      <span className="font-mono text-xs font-bold px-2 py-0.5 rounded-none bg-surface-alt text-text border border-border">
                         {node.stepNumber}
                       </span>
                       <div>
-                        <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-slate-500">
+                        <span className="font-mono text-[9px] uppercase tracking-wider text-muted font-medium">
                           {node.category} LAYER
                         </span>
-                        <h3 className="font-sans font-semibold text-2xl text-white">
+                        <h3 className="font-sans font-bold text-2xl text-text">
                           {node.title}
                         </h3>
                       </div>
                     </div>
 
-                    <div className="font-mono text-[10px] uppercase tracking-[0.15em] text-slate-400 text-right">
+                    <div className="font-mono text-[10px] uppercase tracking-wider text-muted text-right font-medium">
                       {node.latency}
                     </div>
                   </div>
 
-                  <p className="font-sans text-xs text-slate-400 font-light leading-relaxed mb-4">
+                  <p className="font-sans text-xs text-muted font-normal leading-relaxed mb-4">
                     {node.description}
                   </p>
 
                   {/* Tech Tags */}
-                  <div className="flex flex-wrap items-center gap-2 pt-3 border-t border-white/[0.06]">
+                  <div className="flex flex-wrap items-center gap-2 pt-3 border-t border-border">
                     {node.techStack.map((tech) => (
                       <span
                         key={tech}
-                        className="font-mono text-[9px] uppercase tracking-wider px-2 py-0.5 rounded bg-white/[0.03] text-slate-300 border border-white/10"
+                        className="font-mono text-[9px] uppercase tracking-wider px-2 py-0.5 rounded-none bg-surface-alt text-text border border-border"
                       >
                         {tech}
                       </span>
@@ -326,7 +315,7 @@ export const SystemArchitecture: React.FC = () => {
 
                 {/* Connector Arrow (if not last) */}
                 {index < filteredNodes.length - 1 && (
-                  <div className="flex justify-center my-2 text-slate-600">
+                  <div className="flex justify-center my-2 text-muted">
                     <ArrowDown className="w-4 h-4" />
                   </div>
                 )}
@@ -337,71 +326,71 @@ export const SystemArchitecture: React.FC = () => {
 
         {/* Right Column: Node Deep-Dive Inspector (5 cols, sticky) */}
         <div className="lg:col-span-5 sticky top-24 space-y-6">
-          <div className="p-8 rounded-card glass-surface border border-white/20 space-y-6 bg-black/80">
+          <div className="p-8 rounded-none bg-surface border border-border space-y-6">
             {/* Inspector Header */}
-            <div className="pb-4 border-b border-white/[0.08]">
-              <div className="flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.2em] text-slate-500 mb-1">
+            <div className="pb-4 border-b border-border">
+              <div className="flex items-center justify-between font-mono text-[10px] uppercase tracking-wider text-muted mb-1 font-medium">
                 <span>COMPONENT INSPECTOR</span>
-                <span className="text-white font-bold">{selectedNode.stepNumber} // {selectedNode.category}</span>
+                <span className="text-text font-bold">{selectedNode.stepNumber} // {selectedNode.category}</span>
               </div>
-              <h2 className="font-sans font-semibold text-3xl text-white">
+              <h2 className="font-sans font-bold text-3xl text-text">
                 {selectedNode.title}
               </h2>
-              <p className="font-mono text-xs text-slate-400 mt-1">
+              <p className="font-mono text-xs text-muted mt-1">
                 {selectedNode.subtitle}
               </p>
             </div>
 
             {/* Spec Attributes */}
             <div className="grid grid-cols-2 gap-4 font-mono text-xs">
-              <div className="p-3 rounded-lg bg-white/[0.02] border border-white/[0.06]">
-                <span className="text-slate-500 text-[9px] uppercase tracking-wider block mb-1">
+              <div className="p-3 rounded-none bg-surface-alt border border-border">
+                <span className="text-muted text-[9px] uppercase tracking-wider block mb-1 font-medium">
                   LATENCY PROFILE
                 </span>
-                <span className="text-white font-bold">{selectedNode.latency}</span>
+                <span className="text-text font-bold">{selectedNode.latency}</span>
               </div>
-              <div className="p-3 rounded-lg bg-white/[0.02] border border-white/[0.06]">
-                <span className="text-slate-500 text-[9px] uppercase tracking-wider block mb-1">
+              <div className="p-3 rounded-none bg-surface-alt border border-border">
+                <span className="text-muted text-[9px] uppercase tracking-wider block mb-1 font-medium">
                   COMMUNICATION PROTOCOL
                 </span>
-                <span className="text-white font-semibold truncate block">{selectedNode.protocols}</span>
+                <span className="text-text font-semibold truncate block">{selectedNode.protocols}</span>
               </div>
             </div>
 
             {/* Functional Details */}
             <div className="space-y-3 font-sans text-xs">
               <div>
-                <span className="font-mono text-[10px] uppercase tracking-wider text-slate-500 block mb-1">
+                <span className="font-mono text-[10px] uppercase tracking-wider text-muted block mb-1 font-medium">
                   ARCHITECTURAL PURPOSE
                 </span>
-                <p className="text-slate-300 font-light leading-relaxed">
+                <p className="text-text font-normal leading-relaxed">
                   {selectedNode.details.purpose}
                 </p>
               </div>
 
               <div>
-                <span className="font-mono text-[10px] uppercase tracking-wider text-slate-500 block mb-1">
+                <span className="font-mono text-[10px] uppercase tracking-wider text-muted block mb-1 font-medium">
                   PRIMARY INPUTS & UPSTREAM DEPENDENCIES
                 </span>
-                <p className="text-slate-400 font-light">
+                <p className="text-muted font-normal">
                   {selectedNode.details.inputs}
                 </p>
               </div>
 
               <div>
-                <span className="font-mono text-[10px] uppercase tracking-wider text-slate-500 block mb-1">
+                <span className="font-mono text-[10px] uppercase tracking-wider text-muted block mb-1 font-medium">
                   DOWNSTREAM OUTPUTS & CONTRACTS
                 </span>
-                <p className="text-slate-400 font-light">
+                <p className="text-muted font-normal">
                   {selectedNode.details.outputs}
                 </p>
               </div>
 
               <div>
-                <span className="font-mono text-[10px] uppercase tracking-wider text-slate-500 block mb-1">
+                <span className="font-mono text-[10px] uppercase tracking-wider text-muted block mb-1 font-medium">
                   RESILIENCE & FAULT TOLERANCE
                 </span>
-                <p className="text-slate-400 font-light">
+                <p className="text-muted font-normal">
                   {selectedNode.details.failureHandling}
                 </p>
               </div>
@@ -409,14 +398,14 @@ export const SystemArchitecture: React.FC = () => {
 
             {/* Code / Schema Payload Snippet */}
             {selectedNode.codeSnippet && (
-              <div className="pt-4 border-t border-white/[0.08]">
-                <div className="flex items-center justify-between mb-2 font-mono text-[10px] uppercase tracking-wider text-slate-500">
+              <div className="pt-4 border-t border-border">
+                <div className="flex items-center justify-between mb-2 font-mono text-[10px] uppercase tracking-wider text-muted font-medium">
                   <span className="flex items-center gap-1.5">
                     <Code className="w-3.5 h-3.5" />
                     TECHNICAL ARTIFACT SPEC
                   </span>
                 </div>
-                <pre className="p-4 rounded-lg bg-black/90 border border-white/10 font-mono text-[11px] text-slate-300 overflow-x-auto leading-relaxed max-h-64">
+                <pre className="p-4 rounded-none bg-surface-alt border border-border font-mono text-[11px] text-text overflow-x-auto leading-relaxed max-h-64">
                   <code>{selectedNode.codeSnippet}</code>
                 </pre>
               </div>
@@ -424,22 +413,22 @@ export const SystemArchitecture: React.FC = () => {
           </div>
 
           {/* Architectural Design Principles Box */}
-          <div className="p-6 rounded-card glass-surface border border-white/[0.08] space-y-3">
-            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-slate-500 block">
+          <div className="p-6 rounded-none bg-surface border border-border space-y-3">
+            <span className="font-mono text-[10px] uppercase tracking-wider text-muted block font-medium">
               CORE PRINCIPLES
             </span>
-            <div className="space-y-2 text-xs font-sans text-slate-300 font-light">
+            <div className="space-y-2 text-xs font-sans text-muted font-normal leading-relaxed">
               <div className="flex items-start gap-2">
-                <CheckCircle2 className="w-3.5 h-3.5 text-slate-400 shrink-0 mt-0.5" />
-                <span><strong>No Single-Shot Decisions:</strong> Evidence is gathered across temporal frames before raising alerts.</span>
+                <CheckCircle2 className="w-3.5 h-3.5 text-sev-low shrink-0 mt-0.5" />
+                <span><strong className="text-text">No Single-Shot Decisions:</strong> Evidence is gathered across temporal frames before raising alerts.</span>
               </div>
               <div className="flex items-start gap-2">
-                <CheckCircle2 className="w-3.5 h-3.5 text-slate-400 shrink-0 mt-0.5" />
-                <span><strong>Hardware-Conscious Vision:</strong> ARM Graviton3 NEON SIMD ensures continuous 60 FPS scanning at 73.8% lower cost.</span>
+                <CheckCircle2 className="w-3.5 h-3.5 text-sev-low shrink-0 mt-0.5" />
+                <span><strong className="text-text">Hardware-Conscious Vision:</strong> ARM Graviton3 NEON SIMD ensures continuous 60 FPS scanning at 73.8% lower cost.</span>
               </div>
               <div className="flex items-start gap-2">
-                <CheckCircle2 className="w-3.5 h-3.5 text-slate-400 shrink-0 mt-0.5" />
-                <span><strong>Mandatory Human Authorization:</strong> Zero autonomous contractor dispatch without engineer sign-off.</span>
+                <CheckCircle2 className="w-3.5 h-3.5 text-sev-low shrink-0 mt-0.5" />
+                <span><strong className="text-text">Mandatory Human Authorization:</strong> Zero autonomous contractor dispatch without engineer sign-off.</span>
               </div>
             </div>
           </div>
