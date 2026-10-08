@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RoadGuard — Autonomous Pavement Inspection</title>
+    <meta name="description" content="Agentic AI-Powered Road Inspection System featuring multi-frame verification, OpenCV 5 + COOL acceleration, and human-in-the-loop audit sign-off." />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2394a3b8'><path d='M12 2L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-3zm0 4a3 3 0 110 6 3 3 0 010-6zm-5 11c0-2.33 3.33-3.5 5-3.5s5 1.17 5 3.5V18H7v-1z'/></svg>" />
+  </head>
+  <body class="bg-[#080808] text-[#F8FAFC] antialiased selection:bg-white selection:text-black min-h-screen">
+    <!-- Fixed SVG Fractal Noise Texture -->
+    <div
+      class="fixed inset-0 pointer-events-none z-[1] opacity-[0.04] mix-blend-screen"
+      style="background-image: url(&quot;data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E&quot;);"
+    ></div>
+    <div id="root" class="relative z-10"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
