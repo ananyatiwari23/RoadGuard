@@ -18,8 +18,10 @@ import type {
 import type { FrameEvidence } from '../types/evidence';
 import type { Report } from '../types/report';
 import type { BenchmarkResult, ModelEvaluation } from '../types/evaluation';
+import type { ChatMessage } from '../types/chat';
 import { USE_MOCK, API_BASE_URL } from '../config';
 import { MockService } from './mock/mockService';
+import { ChatService } from './mock/chatService';
 
 export async function uploadImage(file: File): Promise<{ uploadId: string }> {
   if (USE_MOCK) return MockService.uploadImage(file);
@@ -152,4 +154,37 @@ export async function getModelEvaluation(): Promise<ModelEvaluation> {
   const res = await fetch(`${API_BASE_URL}/evaluation`);
   if (!res.ok) throw new Error(`Model evaluation error: ${res.statusText}`);
   return res.json();
+}
+
+export async function sendAgentQuery(
+  inspectionId: string,
+  message: string,
+): Promise<ChatMessage[]> {
+  if (USE_MOCK) return ChatService.sendAgentQuery(inspectionId, message);
+  const res = await fetch(`${API_BASE_URL}/inspections/${inspectionId}/chat`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message }),
+  });
+  if (!res.ok) throw new Error(`Agent query failed: ${res.statusText}`);
+  return res.json();
+}
+
+export async function getConversation(
+  inspectionId: string,
+): Promise<ChatMessage[]> {
+  if (USE_MOCK) return ChatService.getConversation(inspectionId);
+  const res = await fetch(`${API_BASE_URL}/inspections/${inspectionId}/chat`);
+  if (!res.ok) throw new Error(`Get conversation failed: ${res.statusText}`);
+  return res.json();
+}
+
+export async function clearConversation(
+  inspectionId: string,
+): Promise<void> {
+  if (USE_MOCK) return ChatService.clearConversation(inspectionId);
+  const res = await fetch(`${API_BASE_URL}/inspections/${inspectionId}/chat`, {
+    method: 'DELETE',
+  });
+  if (!res.ok) throw new Error(`Clear conversation failed: ${res.statusText}`);
 }

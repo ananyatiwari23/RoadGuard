@@ -141,6 +141,25 @@ export const Navbar: React.FC = () => {
               )}
             </div>
 
+            {/* Assistant Link */}
+            <NavLink
+              to="/assistant"
+              className={({ isActive }) =>
+                `font-mono text-[11px] uppercase tracking-[0.18em] transition-colors relative py-1 ${
+                  isActive ? 'text-text font-semibold' : 'text-muted hover:text-text'
+                }`
+              }
+            >
+              {({ isActive }) => (
+                <>
+                  <span>Assistant</span>
+                  {isActive && (
+                    <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-accent" />
+                  )}
+                </>
+              )}
+            </NavLink>
+
             {/* Reports Link */}
             <NavLink
               to="/reports"
@@ -311,32 +330,39 @@ export const Navbar: React.FC = () => {
               04 — INSPECTION HISTORY
             </NavLink>
             <NavLink
+              to="/assistant"
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-sm text-muted hover:text-text hover:font-bold transition-all py-1 border-b border-border/50"
+            >
+              05 — ASSISTANT
+            </NavLink>
+            <NavLink
               to="/reports"
               onClick={() => setMobileMenuOpen(false)}
               className="text-sm text-muted hover:text-text hover:font-bold transition-all py-1 border-b border-border/50"
             >
-              05 — MAINTENANCE REPORTS
+              06 — MAINTENANCE REPORTS
             </NavLink>
             <NavLink
               to="/performance"
               onClick={() => setMobileMenuOpen(false)}
               className="text-sm text-muted hover:text-text hover:font-bold transition-all py-1 border-b border-border/50"
             >
-              06 — COOL BENCHMARK
+              07 — COOL BENCHMARK
             </NavLink>
             <NavLink
               to="/evaluation"
               onClick={() => setMobileMenuOpen(false)}
               className="text-sm text-muted hover:text-text hover:font-bold transition-all py-1 border-b border-border/50"
             >
-              07 — MODEL EVALUATION
+              08 — MODEL EVALUATION
             </NavLink>
             <NavLink
               to="/architecture"
               onClick={() => setMobileMenuOpen(false)}
               className="text-sm text-muted hover:text-text hover:font-bold transition-all py-1 border-b border-border/50"
             >
-              08 — SYSTEM ARCHITECTURE
+              09 — SYSTEM ARCHITECTURE
             </NavLink>
           </div>
 

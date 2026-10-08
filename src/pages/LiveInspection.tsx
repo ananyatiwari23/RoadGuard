@@ -76,6 +76,17 @@ export const LiveInspection: React.FC = () => {
     };
   }, [inspectionId, loadInspectionData]);
 
+  // Handle anchor navigation (e.g. #evidence)
+  useEffect(() => {
+    if (!loading && window.location.hash === '#evidence') {
+      const timer = setTimeout(() => {
+        const el = document.getElementById('evidence');
+        el?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [loading]);
+
   // Polling loop for active simulation
   useEffect(() => {
     if (!isLiveActive) {
@@ -301,9 +312,11 @@ export const LiveInspection: React.FC = () => {
 
       {/* Bottom Section 1: Multi-Frame Temporal Evidence Gallery */}
       {hasFrames && (
-        <EvidenceGallery
-          frames={inspection.evidence}
-        />
+        <div id="evidence">
+          <EvidenceGallery
+            frames={inspection.evidence}
+          />
+        </div>
       )}
 
       {/* Bottom Section 2: Human Supervisor Approval Gate */}

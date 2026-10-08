@@ -11,6 +11,7 @@ import { ReportDetail } from './pages/ReportDetail';
 import { PerformanceBenchmark } from './pages/PerformanceBenchmark';
 import { ModelEvaluation } from './pages/ModelEvaluation';
 import { SystemArchitecture } from './pages/SystemArchitecture';
+import { AIAssistant } from './pages/AIAssistant';
 import { NotFound } from './pages/NotFound';
 import { ComponentShowcase } from './components/demo/ComponentShowcase';
 
@@ -25,6 +26,7 @@ export const App: React.FC = () => {
           <Route path="live" element={<Navigate to="/live/RG-0001" replace />} />
           <Route path="history" element={<InspectionHistory />} />
           <Route path="inspection/:id" element={<InspectionDetail />} />
+          <Route path="assistant" element={<AIAssistant />} />
           <Route path="reports" element={<Reports />} />
           <Route path="reports/:id" element={<ReportDetail />} />
           <Route path="performance" element={<PerformanceBenchmark />} />
