@@ -97,7 +97,10 @@ export const NewInspection: React.FC = () => {
         uploadRes = await uploadVideo(selectedFile);
       }
 
-      const { inspectionId } = await startInspection(uploadRes.uploadId, activeTab, selectedFile.name);
+      const { inspectionId } = await startInspection(
+        uploadRes.uploadId,
+        activeTab === 'image' ? 'IMAGE' : 'VIDEO'
+      );
       navigate(`/live/${inspectionId}`);
     } catch (err: any) {
       setValidationError(err.message || 'Failed to initialize inspection pipeline.');

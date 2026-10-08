@@ -29,7 +29,11 @@ import {
   SAMPLE_BENCHMARK_RESULT,
   SAMPLE_MODEL_EVALUATION,
 } from './mockData';
-import { DEMO_EVIDENCE_FRAMES } from './demoInspection';
+import {
+  DEMO_EVIDENCE_FRAMES,
+  DEMO_INSPECTION,
+  DEMO_REPORT,
+} from './demoInspection';
 
 // ---------------------------------------------------------------------------
 // In-memory stores
@@ -253,8 +257,9 @@ function advanceSimulation(sim: SimulationState): void {
 
     // Generate report at WAITING_FOR_APPROVAL
     if (step.status === 'WAITING_FOR_APPROVAL') {
+      const reportNum = sim.inspectionId.startsWith('RG-') ? sim.inspectionId.slice(3) : sim.inspectionId;
       const report: Report = {
-        id: `REP-${sim.inspectionId}`,
+        id: `REP-${reportNum}`,
         inspectionId: sim.inspectionId,
         damageClass: insp.damageClass,
         severity: insp.severity,
@@ -265,6 +270,7 @@ function advanceSimulation(sim: SimulationState): void {
         status: 'PENDING',
       };
       reports.set(sim.inspectionId, report);
+      reports.set(report.id, report);
       insp.reportId = report.id;
       simulations.delete(sim.inspectionId);
     }
@@ -274,6 +280,19 @@ function advanceSimulation(sim: SimulationState): void {
 }
 
 let nextUploadId = 1;
+
+function getNextInspectionId(): string {
+  let maxId = 0;
+  for (const id of inspections.keys()) {
+    const match = id.match(/^RG-(\d+)$/);
+    if (match) {
+      const num = parseInt(match[1], 10);
+      if (num > maxId) maxId = num;
+    }
+  }
+  const nextNum = maxId + 1;
+  return `RG-${String(nextNum).padStart(4, '0')}`;
+}
 
 // ---------------------------------------------------------------------------
 // Mock Service — implements all 15 canonical API methods
@@ -292,7 +311,7 @@ export const MockService = {
 
   async startInspection(uploadId: string, type: InspectionInputType): Promise<{ inspectionId: string }> {
     await delay(200);
-    const inspectionId = `RG-SIM-${String(Date.now()).slice(-6)}`;
+    const inspectionId = getNextInspectionId();
 
     const newInspection: Inspection = {
       id: inspectionId,
@@ -335,8 +354,11 @@ export const MockService = {
     const sim = simulations.get(id);
     if (sim) advanceSimulation(sim);
 
-    const insp = inspections.get(id) || inspections.get('RG-0001');
-    if (!insp) throw new Error(`Inspection ${id} not found`);
+    let insp = inspections.get(id);
+    if (!insp) {
+      console.warn(`[MockService] Inspection ID "${id}" not found. Falling back to RG-0001.`);
+      insp = inspections.get('RG-0001') || DEMO_INSPECTION;
+    }
     return insp.status;
   },
 
@@ -345,8 +367,11 @@ export const MockService = {
     const sim = simulations.get(id);
     if (sim) advanceSimulation(sim);
 
-    const insp = inspections.get(id) || inspections.get('RG-0001');
-    if (!insp) throw new Error(`Inspection ${id} not found`);
+    let insp = inspections.get(id);
+    if (!insp) {
+      console.warn(`[MockService] Inspection ID "${id}" not found. Falling back to RG-0001.`);
+      insp = inspections.get('RG-0001') || DEMO_INSPECTION;
+    }
 
     const currentStage = mapStatusToStage(insp.status);
     return {
@@ -360,22 +385,31 @@ export const MockService = {
 
   async getDetectionResults(id: string): Promise<Detection[]> {
     await delay(80);
-    const insp = inspections.get(id) || inspections.get('RG-0001');
-    if (!insp) throw new Error(`Inspection ${id} not found`);
+    let insp = inspections.get(id);
+    if (!insp) {
+      console.warn(`[MockService] Inspection ID "${id}" not found. Falling back to RG-0001.`);
+      insp = inspections.get('RG-0001') || DEMO_INSPECTION;
+    }
     return insp.detections;
   },
 
   async getFrameEvidence(id: string): Promise<FrameEvidence[]> {
     await delay(80);
-    const insp = inspections.get(id) || inspections.get('RG-0001');
-    if (!insp) throw new Error(`Inspection ${id} not found`);
+    let insp = inspections.get(id);
+    if (!insp) {
+      console.warn(`[MockService] Inspection ID "${id}" not found. Falling back to RG-0001.`);
+      insp = inspections.get('RG-0001') || DEMO_INSPECTION;
+    }
     return insp.evidence;
   },
 
   async getSeverity(id: string): Promise<{ severity: Severity; confidence: number; persistenceFrames: number; location: string }> {
     await delay(80);
-    const insp = inspections.get(id) || inspections.get('RG-0001');
-    if (!insp) throw new Error(`Inspection ${id} not found`);
+    let insp = inspections.get(id);
+    if (!insp) {
+      console.warn(`[MockService] Inspection ID "${id}" not found. Falling back to RG-0001.`);
+      insp = inspections.get('RG-0001') || DEMO_INSPECTION;
+    }
     return {
       severity: insp.severity,
       confidence: insp.confidence,
@@ -386,8 +420,11 @@ export const MockService = {
 
   async getReport(id: string): Promise<Report> {
     await delay(80);
-    const report = reports.get(id) || reports.get('RG-0001') || reports.get('REP-0001');
-    if (!report) throw new Error(`Report for inspection ${id} not found`);
+    let report = reports.get(id) || reports.get('RG-0001') || reports.get('REP-0001');
+    if (!report) {
+      console.warn(`[MockService] Report for inspection ID "${id}" not found. Falling back to DEMO_REPORT.`);
+      report = DEMO_REPORT;
+    }
     return JSON.parse(JSON.stringify(report));
   },
 
@@ -479,8 +516,11 @@ export const MockService = {
     const sim = simulations.get(id);
     if (sim) advanceSimulation(sim);
 
-    const insp = inspections.get(id) || inspections.get('RG-0001');
-    if (!insp) throw new Error(`Inspection ${id} not found`);
+    let insp = inspections.get(id);
+    if (!insp) {
+      console.warn(`[MockService] Inspection ID "${id}" not found. Falling back to RG-0001.`);
+      insp = inspections.get('RG-0001') || DEMO_INSPECTION;
+    }
     return JSON.parse(JSON.stringify(insp));
   },
 

@@ -328,7 +328,8 @@ export const PerformanceBenchmark: React.FC = () => {
           </span>
         </div>
 
-        <div className="overflow-x-auto">
+        {/* Desktop Table View */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left font-mono text-xs">
             <thead>
               <tr className="border-b border-white/[0.08] bg-white/[0.01] text-slate-500 text-[9px] uppercase tracking-[0.2em]">
@@ -363,6 +364,33 @@ export const PerformanceBenchmark: React.FC = () => {
               ))}
             </tbody>
           </table>
+        </div>
+
+        {/* Mobile Card List (below 768px) */}
+        <div className="md:hidden divide-y divide-white/[0.06] p-4 space-y-4">
+          {(metricsTableRows || []).map((row) => (
+            <div key={row.metric} className="pt-3 first:pt-0 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="font-semibold text-white text-xs">{row.metric}</span>
+                <span className="px-2 py-0.5 rounded bg-white/[0.08] border border-white/20 text-slate-200 text-[10px] font-mono">
+                  {row.advantage}
+                </span>
+              </div>
+              <div className="grid grid-cols-2 gap-2 font-mono text-[11px] bg-white/[0.02] p-2 rounded border border-white/[0.04]">
+                <div>
+                  <span className="block text-[9px] text-slate-500 uppercase tracking-wider">STANDARD x86</span>
+                  <span className="text-slate-400">{row.standard}</span>
+                </div>
+                <div>
+                  <span className="block text-[9px] text-slate-500 uppercase tracking-wider">ARM + COOL</span>
+                  <span className="text-white font-bold">{row.optimized}</span>
+                </div>
+              </div>
+              <p className="text-[11px] text-slate-400 font-sans font-light leading-relaxed">
+                {row.reason}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
 

@@ -22,7 +22,7 @@ export const App: React.FC = () => {
           <Route index element={<Dashboard />} />
           <Route path="new" element={<NewInspection />} />
           <Route path="live/:id" element={<LiveInspection />} />
-          <Route path="live" element={<Navigate to="/live/INSP-2026-0881" replace />} />
+          <Route path="live" element={<Navigate to="/live/RG-0001" replace />} />
           <Route path="history" element={<InspectionHistory />} />
           <Route path="inspection/:id" element={<InspectionDetail />} />
           <Route path="reports" element={<Reports />} />

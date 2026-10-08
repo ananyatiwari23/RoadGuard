@@ -36,20 +36,22 @@ export const InspectionDetail: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    async function loadData() {
-      setLoading(true);
-      try {
-        const data = await getInspectionDetail(inspectionId);
-        setInspection(data);
-      } catch (err: any) {
-        setError(err?.message || 'Inspection telemetry record not found.');
-      } finally {
-        setLoading(false);
-      }
+  const loadData = React.useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await getInspectionDetail(inspectionId);
+      setInspection(data);
+    } catch (err: any) {
+      setError(err?.message || 'Inspection telemetry record not found.');
+    } finally {
+      setLoading(false);
     }
-    loadData();
   }, [inspectionId]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   if (loading) {
     return <LoadingState variant="card" count={3} />;
@@ -60,7 +62,7 @@ export const InspectionDetail: React.FC = () => {
       <ErrorState
         title="RECORD NOT FOUND"
         reason={error || `Inspection record ${inspectionId} does not exist.`}
-        onRetry={() => navigate('/history')}
+        onRetry={loadData}
       />
     );
   }
@@ -117,7 +119,7 @@ export const InspectionDetail: React.FC = () => {
           <SeverityBadge severity={inspection.severity} />
 
           <Link
-            to={`/inspections/${inspection.id}/live`}
+            to={`/live/${inspection.id}`}
             className="flex items-center gap-2 px-4 py-2.5 rounded-card border border-white/10 bg-white/[0.03] hover:bg-white/[0.08] text-white font-mono text-[11px] uppercase tracking-[0.2em] transition-all"
           >
             <Radio className="w-3.5 h-3.5 text-slate-400" />

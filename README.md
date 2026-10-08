@@ -1,32 +1,53 @@
-# React + TypeScript + Vite
+# RoadGuard — Agentic Road Inspection System
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+## What it is
+A frontend for an agentic road-inspection system that observes road imagery/video, detects damage, verifies across multiple frames, assesses severity, and generates a maintenance report requiring human approval.
 
-Currently, two official plugins are available:
+## The agentic loop
+`OBSERVE` → `VERIFY` → `RECHECK` → `ASSESS` → `REPORT` → `HUMAN REVIEW`
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Damage classes (RDD2022)
+- **D00** Longitudinal Crack
+- **D10** Transverse Crack
+- **D20** Alligator Crack
+- **D40** Pothole
 
-## React Compiler
+## Demo flow
+1. **Dashboard** → `/new` → upload image or video run
+2. **Live Inspection** shows agent state machine running in real time
+3. **Evidence timeline**: 7 frames, confidence climbing `62% → 74% → 82% → 88% → 90% → 91%`
+4. **Severity** assessed as `HIGH` (cavity in active wheelpath)
+5. **Report generated** → `HUMAN APPROVAL REQUIRED`
+6. **Approve** → work order authorized, persisted to History and Reports
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech stack
+React 19 · Vite · TypeScript · Tailwind CSS · Recharts · Zustand · Framer Motion · lucide-react
 
-## Expanding the Oxlint configuration
+## Backend status
+Frontend-only. All data flows through `src/services/api.ts` which currently delegates to `src/services/mock/`. To connect a real backend, set `USE_MOCK = false` in `src/config.ts` and point `API_BASE_URL` at your endpoint.
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+## Run locally
+```bash
+npm install
+npm run dev
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+App will be available at `http://localhost:5173/`.
+
+## Project structure
+```
+src/
+├── components/
+│   ├── agent/         # Stepper workflow, event log, decision cards
+│   ├── demo/          # Dev component showcase
+│   ├── evidence/      # Bounding boxes, overlays, evidence gallery
+│   ├── inspection/    # Detection panels, severity cards, approval gates, previews
+│   ├── layout/        # Modern Obsidian navigation bar & app frame
+│   └── ui/            # Badges, bars, metrics, and Loading/Empty/Error primitives
+├── pages/             # Dashboard, New, Live Cockpit, History, Reports, Benchmarks
+├── services/          # Canonical API client and deterministic mock simulation
+│   └── mock/          # 18 seeded inspections, simulation engine, SVG road generators
+├── store/             # Global client state (theme, preferences)
+├── types/             # Strict TypeScript domain schemas (Agent, Inspection, Report)
+└── config.ts          # Endpoint & simulation runtime switches
+```

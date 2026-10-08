@@ -5,6 +5,7 @@ import { Inspection, Severity, Report } from '../types';
 import { ReportPreview } from '../components/inspection/ReportPreview';
 import { LoadingState } from '../components/ui/LoadingState';
 import { EmptyState } from '../components/ui/EmptyState';
+import { ErrorState } from '../components/ui/ErrorState';
 import {
   FileText,
   Search,
@@ -21,43 +22,47 @@ export const Reports: React.FC = () => {
   const navigate = useNavigate();
   const [inspections, setInspections] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   // Filters
   const [activeTab, setActiveTab] = useState<'all' | 'pending' | 'approved' | 'rejected'>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [severityFilter, setSeverityFilter] = useState<'all' | Severity>('all');
 
-  useEffect(() => {
-    async function loadReports() {
-      setLoading(true);
-      try {
-        const summaries = await getInspectionHistory();
-        const fullInspections = await Promise.all(
-          summaries.map(async (s) => {
-            const insp = await getInspectionDetail(s.id);
-            if (insp.reportId) {
-              try {
-                const rep = await getReport(insp.id);
-                return { ...insp, report: rep };
-              } catch {
-                return insp;
-              }
+  const loadReports = React.useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const summaries = await getInspectionHistory();
+      const fullInspections = await Promise.all(
+        summaries.map(async (s) => {
+          const insp = await getInspectionDetail(s.id);
+          if (insp.reportId) {
+            try {
+              const rep = await getReport(insp.id);
+              return { ...insp, report: rep };
+            } catch {
+              return insp;
             }
-            return insp;
-          })
-        );
-        const withReports = fullInspections.filter(
-          (insp) => insp.reportId || ['WAITING_FOR_APPROVAL', 'APPROVED', 'REJECTED'].includes(insp.status)
-        );
-        setInspections(withReports);
-      } catch (err) {
-        console.error('Failed to load reports:', err);
-      } finally {
-        setLoading(false);
-      }
+          }
+          return insp;
+        })
+      );
+      const withReports = fullInspections.filter(
+        (insp) => insp.reportId || ['WAITING_FOR_APPROVAL', 'APPROVED', 'REJECTED'].includes(insp.status)
+      );
+      setInspections(withReports);
+    } catch (err: any) {
+      console.error('Failed to load reports:', err);
+      setError(err?.message || 'Failed to retrieve maintenance reports.');
+    } finally {
+      setLoading(false);
     }
-    loadReports();
   }, []);
+
+  useEffect(() => {
+    loadReports();
+  }, [loadReports]);
 
   const filteredInspections = useMemo(() => {
     return inspections.filter((insp) => {
@@ -116,7 +121,7 @@ export const Reports: React.FC = () => {
             INSPECTION ARCHIVE
           </Link>
           <Link
-            to="/inspections/new"
+            to="/new"
             className="flex items-center gap-2 px-5 py-2.5 rounded-card silver-gradient-bg text-black font-mono text-[11px] font-bold uppercase tracking-[0.2em] hover:opacity-90 shadow-[0_0_20px_rgba(255,255,255,0.15)] transition-all"
           >
             NEW INSPECTION
@@ -215,7 +220,13 @@ export const Reports: React.FC = () => {
       </div>
 
       {/* Reports Grid */}
-      {loading ? (
+      {error ? (
+        <ErrorState
+          title="WORK ORDERS TELEMETRY OFFLINE"
+          reason={error}
+          onRetry={loadReports}
+        />
+      ) : loading ? (
         <LoadingState variant="card" count={6} />
       ) : filteredInspections.length === 0 ? (
         <EmptyState

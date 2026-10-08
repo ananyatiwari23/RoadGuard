@@ -43,26 +43,28 @@ export const ReportDetail: React.FC = () => {
   const [reviewerNote, setReviewerNote] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  useEffect(() => {
-    async function loadData() {
-      setLoading(true);
+  const loadData = React.useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await getInspectionDetail(lookupId);
+      setInspection(data);
       try {
-        const data = await getInspectionDetail(lookupId);
-        setInspection(data);
-        try {
-          const rep = await getReport(data.id);
-          setReport(rep);
-        } catch {
-          // Report not yet generated or independent
-        }
-      } catch (err: any) {
-        setError(err?.message || 'Report not found.');
-      } finally {
-        setLoading(false);
+        const rep = await getReport(data.id);
+        setReport(rep);
+      } catch {
+        // Report not yet generated or independent
       }
+    } catch (err: any) {
+      setError(err?.message || 'Report not found.');
+    } finally {
+      setLoading(false);
     }
-    loadData();
   }, [lookupId]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   const handlePrint = () => {
     window.print();
@@ -106,7 +108,7 @@ export const ReportDetail: React.FC = () => {
       <ErrorState
         title="WORK ORDER NOT FOUND"
         reason={error || `Report for ${lookupId} could not be retrieved.`}
-        onRetry={() => navigate('/reports')}
+        onRetry={loadData}
       />
     );
   }
@@ -130,7 +132,7 @@ export const ReportDetail: React.FC = () => {
 
         <div className="flex items-center gap-3">
           <Link
-            to={`/inspections/${inspection.id}/live`}
+            to={`/live/${inspection.id}`}
             className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-white/10 bg-white/[0.03] hover:bg-white/[0.08] text-white font-mono text-[10px] uppercase tracking-[0.15em] transition-all"
           >
             <Radio className="w-3.5 h-3.5 text-slate-400" />
@@ -223,7 +225,7 @@ export const ReportDetail: React.FC = () => {
                 RDD2022 CLASSIFICATION
               </span>
               <div className="flex items-center gap-2 mt-1">
-                <DamageClassChip damageClass={inspection.damageClass} label={DAMAGE_CLASSES[inspection.damageClass]?.label} size="sm" />
+                <DamageClassChip damageClass={inspection.damageClass} size="sm" />
               </div>
             </div>
             <div className="p-4 rounded-lg bg-white/[0.02] border border-white/[0.06] print:border-gray-300 print:bg-gray-50">

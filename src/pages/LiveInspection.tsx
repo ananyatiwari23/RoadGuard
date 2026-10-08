@@ -178,7 +178,11 @@ export const LiveInspection: React.FC = () => {
       <ErrorState
         title="INSPECTION SESSION NOT ACCESSIBLE"
         reason={error || `Session ${inspectionId} does not exist or could not be loaded.`}
-        onRetry={() => navigate('/dashboard')}
+        onRetry={() => {
+          setError(null);
+          setLoading(true);
+          loadInspectionData().then(() => setLoading(false));
+        }}
       />
     );
   }

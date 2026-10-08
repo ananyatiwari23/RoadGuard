@@ -250,82 +250,117 @@ export const Dashboard: React.FC = () => {
               }}
             />
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="border-b border-white/[0.06] text-[10px] font-mono uppercase tracking-[0.15em] text-slate-500">
-                    <th className="py-2.5 px-3">ID</th>
-                    <th className="py-2.5 px-3">Date</th>
-                    <th className="py-2.5 px-3">Damage</th>
-                    <th className="py-2.5 px-3">Severity</th>
-                    <th className="py-2.5 px-3 min-w-[120px]">Confidence</th>
-                    <th className="py-2.5 px-3">Frames</th>
-                    <th className="py-2.5 px-3">Status</th>
-                    <th className="py-2.5 px-2 text-right"></th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-white/[0.03]">
-                  {recentInspections.map((insp) => (
-                    <tr
-                      key={insp.id}
-                      onClick={() => navigate(`/inspection/${insp.id}`)}
-                      className="group hover:bg-white/[0.03] transition-colors cursor-pointer text-xs font-mono"
-                    >
-                      {/* ID */}
-                      <td className="py-3 px-3 font-bold text-white group-hover:text-silver-gradient transition-colors">
-                        {insp.id}
-                      </td>
+            <div>
+              {/* Desktop Table View */}
+              <div className="hidden md:block overflow-x-auto">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="border-b border-white/[0.06] text-[10px] font-mono uppercase tracking-[0.15em] text-slate-500">
+                      <th className="py-2.5 px-3">ID</th>
+                      <th className="py-2.5 px-3">Date</th>
+                      <th className="py-2.5 px-3">Damage</th>
+                      <th className="py-2.5 px-3">Severity</th>
+                      <th className="py-2.5 px-3 min-w-[120px]">Confidence</th>
+                      <th className="py-2.5 px-3">Frames</th>
+                      <th className="py-2.5 px-3">Status</th>
+                      <th className="py-2.5 px-2 text-right"></th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/[0.03]">
+                    {recentInspections.map((insp) => (
+                      <tr
+                        key={insp.id}
+                        onClick={() => navigate(`/inspection/${insp.id}`)}
+                        className="group hover:bg-white/[0.03] transition-colors cursor-pointer text-xs font-mono"
+                      >
+                        {/* ID */}
+                        <td className="py-3 px-3 font-bold text-white group-hover:text-silver-gradient transition-colors">
+                          {insp.id}
+                        </td>
 
-                      {/* Date */}
-                      <td className="py-3 px-3 text-slate-400 text-[11px]">
+                        {/* Date */}
+                        <td className="py-3 px-3 text-slate-400 text-[11px]">
+                          {new Date(insp.createdAt).toLocaleDateString('en-US', {
+                            month: 'short',
+                            day: 'numeric',
+                          })}
+                        </td>
+
+                        {/* Damage */}
+                        <td className="py-3 px-3">
+                          <DamageClassChip damageClass={insp.damageClass} size="sm" />
+                        </td>
+
+                        {/* Severity */}
+                        <td className="py-3 px-3">
+                          <SeverityBadge severity={insp.severity} size="sm" />
+                        </td>
+
+                        {/* Confidence */}
+                        <td className="py-3 px-3">
+                          <div className="flex items-center gap-2">
+                            <ConfidenceBar
+                              confidence={insp.confidence}
+                              size="sm"
+                              showLabel={false}
+                            />
+                            <span className="text-[10px] text-slate-300 w-8 text-right shrink-0">
+                              {insp.confidence}%
+                            </span>
+                          </div>
+                        </td>
+
+                        {/* Frames Checked */}
+                        <td className="py-3 px-3 text-slate-400 text-[11px]">
+                          {insp.framesChecked}f
+                        </td>
+
+                        {/* Status */}
+                        <td className="py-3 px-3">
+                          <StatusBadge status={insp.status} size="sm" />
+                        </td>
+
+                        {/* Action Arrow */}
+                        <td className="py-3 px-2 text-right">
+                          <ArrowUpRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-white transition-colors ml-auto" />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Mobile Card List (below 768px) */}
+              <div className="md:hidden divide-y divide-white/[0.06] space-y-3">
+                {recentInspections.map((insp) => (
+                  <div
+                    key={insp.id}
+                    onClick={() => navigate(`/inspection/${insp.id}`)}
+                    className="pt-3 first:pt-0 hover:bg-white/[0.02] p-2 rounded-lg transition-colors cursor-pointer flex flex-col gap-2 font-mono text-xs"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-white">{insp.id}</span>
+                      <span className="text-[10px] text-slate-500">
                         {new Date(insp.createdAt).toLocaleDateString('en-US', {
                           month: 'short',
                           day: 'numeric',
                         })}
-                      </td>
-
-                      {/* Damage */}
-                      <td className="py-3 px-3">
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-1.5">
                         <DamageClassChip damageClass={insp.damageClass} size="sm" />
-                      </td>
-
-                      {/* Severity */}
-                      <td className="py-3 px-3">
                         <SeverityBadge severity={insp.severity} size="sm" />
-                      </td>
-
-                      {/* Confidence */}
-                      <td className="py-3 px-3">
-                        <div className="flex items-center gap-2">
-                          <ConfidenceBar
-                            confidence={insp.confidence}
-                            size="sm"
-                            showLabel={false}
-                          />
-                          <span className="text-[10px] text-slate-300 w-8 text-right shrink-0">
-                            {insp.confidence}%
-                          </span>
-                        </div>
-                      </td>
-
-                      {/* Frames Checked */}
-                      <td className="py-3 px-3 text-slate-400 text-[11px]">
-                        {insp.framesChecked}f
-                      </td>
-
-                      {/* Status */}
-                      <td className="py-3 px-3">
-                        <StatusBadge status={insp.status} size="sm" />
-                      </td>
-
-                      {/* Action Arrow */}
-                      <td className="py-3 px-2 text-right">
-                        <ArrowUpRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-white transition-colors ml-auto" />
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                      </div>
+                      <StatusBadge status={insp.status} size="sm" />
+                    </div>
+                    <div className="flex items-center justify-between text-[10px] text-slate-400 pt-0.5">
+                      <span>Confidence: {insp.confidence}% ({insp.framesChecked}f)</span>
+                      <ArrowUpRight className="w-3 h-3 text-slate-400" />
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </div>

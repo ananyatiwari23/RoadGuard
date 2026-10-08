@@ -202,7 +202,8 @@ export const ModelEvaluation: React.FC = () => {
           </span>
         </div>
 
-        <div className="overflow-x-auto">
+        {/* Desktop Table View */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left font-mono text-xs">
             <thead>
               <tr className="border-b border-white/[0.08] bg-white/[0.01] text-slate-500 text-[9px] uppercase tracking-[0.2em]">
@@ -248,6 +249,41 @@ export const ModelEvaluation: React.FC = () => {
               ))}
             </tbody>
           </table>
+        </div>
+
+        {/* Mobile Card List (below 768px) */}
+        <div className="md:hidden divide-y divide-white/[0.06] p-4 space-y-4">
+          {(classList || []).map((c) => (
+            <div key={c.damageClass} className="pt-3 first:pt-0 space-y-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <DamageClassChip damageClass={c.damageClass as DamageClass} size="sm" />
+                  <span className="font-sans font-semibold text-sm text-white">{c.name}</span>
+                </div>
+                <span className="font-mono text-xs text-white font-bold">{c.f1}% F1</span>
+              </div>
+              <div className="grid grid-cols-3 gap-2 font-mono text-[10px] text-slate-400 bg-white/[0.02] p-2 rounded border border-white/[0.04]">
+                <div>
+                  <span className="block text-slate-500">PRECISION</span>
+                  <span className="text-white font-semibold">{c.precision}%</span>
+                </div>
+                <div>
+                  <span className="block text-slate-500">RECALL</span>
+                  <span className="text-white font-semibold">{c.recall}%</span>
+                </div>
+                <div>
+                  <span className="block text-slate-500">SAMPLES</span>
+                  <span className="text-slate-300">{c.instances.toLocaleString()}</span>
+                </div>
+              </div>
+              <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
+                <div
+                  className="bg-white h-full rounded-full transition-all duration-500"
+                  style={{ width: `${c.f1}%` }}
+                />
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 

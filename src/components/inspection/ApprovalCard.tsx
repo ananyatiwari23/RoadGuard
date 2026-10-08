@@ -201,7 +201,7 @@ export const ApprovalCard: React.FC<ApprovalCardProps> = ({
               </div>
             </div>
           ) : (
-            <div className="flex items-center gap-3">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
               <button
                 onClick={() => setShowApproveNote(true)}
                 className="flex-1 btn-silver py-2.5 rounded font-mono text-xs font-bold uppercase tracking-[0.15em] flex items-center justify-center gap-2 cursor-pointer shadow-lg"

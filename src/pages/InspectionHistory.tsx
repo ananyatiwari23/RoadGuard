@@ -8,6 +8,7 @@ import { DamageClassChip } from '../components/ui/DamageClassChip';
 import { ConfidenceBar } from '../components/ui/ConfidenceBar';
 import { LoadingState } from '../components/ui/LoadingState';
 import { EmptyState } from '../components/ui/EmptyState';
+import { ErrorState } from '../components/ui/ErrorState';
 import {
   Search,
   Filter,
@@ -29,6 +30,7 @@ export const InspectionHistory: React.FC = () => {
   const navigate = useNavigate();
   const [inspections, setInspections] = useState<InspectionSummary[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<'table' | 'grid'>('table');
 
   // Filter state
@@ -38,20 +40,23 @@ export const InspectionHistory: React.FC = () => {
   const [selectedSeverity, setSelectedSeverity] = useState<string>('all');
   const [selectedStatus, setSelectedStatus] = useState<string>('all');
 
-  useEffect(() => {
-    async function loadData() {
-      setLoading(true);
-      try {
-        const data = await getInspectionHistory();
-        setInspections(data);
-      } catch (err) {
-        console.error('Failed to load inspection history:', err);
-      } finally {
-        setLoading(false);
-      }
+  const loadData = React.useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await getInspectionHistory();
+      setInspections(data);
+    } catch (err: any) {
+      console.error('Failed to load inspection history:', err);
+      setError(err?.message || 'Failed to load inspection telemetry.');
+    } finally {
+      setLoading(false);
     }
-    loadData();
   }, []);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   // Filtered Inspections
   const filteredInspections = useMemo(() => {
@@ -154,7 +159,7 @@ export const InspectionHistory: React.FC = () => {
             EXPORT CSV
           </button>
           <Link
-            to="/inspections/new"
+            to="/new"
             className="flex items-center gap-2 px-5 py-2.5 rounded-card silver-gradient-bg text-black font-mono text-[11px] font-bold uppercase tracking-[0.2em] hover:opacity-90 shadow-[0_0_20px_rgba(255,255,255,0.15)] transition-all"
           >
             NEW INSPECTION
@@ -309,7 +314,13 @@ export const InspectionHistory: React.FC = () => {
       </div>
 
       {/* Main Results Display */}
-      {loading ? (
+      {error ? (
+        <ErrorState
+          title="INSPECTION ARCHIVE OFFLINE"
+          reason={error}
+          onRetry={loadData}
+        />
+      ) : loading ? (
         <LoadingState variant={viewMode === 'table' ? 'table' : 'card'} count={5} />
       ) : filteredInspections.length === 0 ? (
         <EmptyState
@@ -322,7 +333,8 @@ export const InspectionHistory: React.FC = () => {
         />
       ) : viewMode === 'table' ? (
         <div className="rounded-card glass-surface overflow-hidden border border-white/[0.08]">
-          <div className="overflow-x-auto">
+          {/* Desktop Table View */}
+          <div className="hidden md:block overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="border-b border-white/[0.08] bg-white/[0.01] font-mono text-[9px] uppercase tracking-[0.2em] text-slate-500">
@@ -373,7 +385,6 @@ export const InspectionHistory: React.FC = () => {
                     <td className="py-4 px-4">
                       <DamageClassChip
                         damageClass={item.damageClass as DamageClass}
-                        label={DAMAGE_CLASSES[item.damageClass]?.label}
                         size="sm"
                       />
                     </td>
@@ -402,13 +413,13 @@ export const InspectionHistory: React.FC = () => {
                     <td className="py-4 px-5 text-right">
                       <div className="flex items-center justify-end gap-2">
                         <Link
-                          to={`/inspections/${item.id}/live`}
+                          to={`/live/${item.id}`}
                           className="px-3 py-1.5 rounded-lg border border-white/10 bg-white/[0.03] hover:bg-white/[0.08] text-white font-mono text-[10px] uppercase tracking-[0.15em] transition-colors"
                         >
                           COCKPIT
                         </Link>
                         <Link
-                          to={`/inspections/${item.id}`}
+                          to={`/inspection/${item.id}`}
                           className="p-1.5 rounded-lg border border-white/10 hover:bg-white/[0.06] text-slate-400 hover:text-white transition-colors"
                           title="View Telemetry Record"
                         >
@@ -420,6 +431,43 @@ export const InspectionHistory: React.FC = () => {
                 ))}
               </tbody>
             </table>
+          </div>
+
+          {/* Mobile Card List (below 768px) */}
+          <div className="md:hidden divide-y divide-white/[0.06] p-4 space-y-4">
+            {filteredInspections.map((item) => (
+              <div key={item.id} className="pt-3 first:pt-0 space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <span className="font-mono text-xs font-bold text-white">{item.id}</span>
+                  <span className="font-mono text-[10px] text-slate-500">{item.createdAt}</span>
+                </div>
+                <div className="flex items-center justify-between gap-2">
+                  <DamageClassChip damageClass={item.damageClass} size="sm" />
+                  <div className="flex items-center gap-2">
+                    <SeverityBadge severity={item.severity} size="sm" />
+                    <StatusBadge status={item.status as any} size="sm" />
+                  </div>
+                </div>
+                <div className="flex items-center justify-between font-mono text-[10px] text-slate-400">
+                  <span>Confidence: {item.confidence}%</span>
+                  <span>{item.framesChecked} frames</span>
+                </div>
+                <div className="flex items-center gap-2 pt-1">
+                  <Link
+                    to={`/live/${item.id}`}
+                    className="flex-1 text-center py-1.5 rounded-lg border border-white/10 bg-white/[0.03] text-white font-mono text-[10px] uppercase tracking-wider"
+                  >
+                    Cockpit
+                  </Link>
+                  <Link
+                    to={`/inspection/${item.id}`}
+                    className="flex-1 text-center py-1.5 rounded-lg silver-gradient-bg text-black font-mono text-[10px] font-bold uppercase tracking-wider"
+                  >
+                    Details
+                  </Link>
+                </div>
+              </div>
+            ))}
           </div>
 
           {/* Table Footer */}
@@ -435,7 +483,7 @@ export const InspectionHistory: React.FC = () => {
           {filteredInspections.map((item) => (
             <Link
               key={item.id}
-              to={`/inspections/${item.id}`}
+              to={`/inspection/${item.id}`}
               className="block rounded-card glass-surface p-5 hover:border-white/20 border border-white/[0.08] transition-all group"
             >
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/[0.08]">
@@ -471,7 +519,6 @@ export const InspectionHistory: React.FC = () => {
                     </span>
                     <DamageClassChip
                       damageClass={item.damageClass}
-                      label={DAMAGE_CLASSES[item.damageClass]?.label}
                       size="sm"
                     />
                   </div>
@@ -480,7 +527,7 @@ export const InspectionHistory: React.FC = () => {
                     <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-slate-500 block mb-1">
                       CONFIDENCE
                     </span>
-                    <ConfidenceBar value={item.confidence} size="sm" />
+                    <ConfidenceBar confidence={item.confidence} size="sm" />
                   </div>
                 </div>
 

@@ -118,7 +118,7 @@ export const Navbar: React.FC = () => {
                     <div className="text-[10px] text-slate-500 font-mono mt-0.5">Upload image or video</div>
                   </NavLink>
                   <NavLink
-                    to="/live/INSP-2026-0881"
+                    to="/live/RG-0001"
                     className="block px-3 py-2.5 rounded-lg text-slate-300 hover:text-white hover:bg-white/[0.04] transition-colors"
                   >
                     <div className="font-mono text-[11px] uppercase tracking-[0.2em] flex items-center justify-between">
@@ -293,7 +293,7 @@ export const Navbar: React.FC = () => {
               02 — NEW INSPECTION
             </NavLink>
             <NavLink
-              to="/live/INSP-2026-0881"
+              to="/live/RG-0001"
               onClick={() => setMobileMenuOpen(false)}
               className="text-base text-slate-300 hover:text-white hover:translate-x-1 transition-transform"
             >
